@@ -40,8 +40,8 @@ export class PlatformerScene extends Phaser.Scene {
     this.platforms = this.physics.add.staticGroup();
     this.platforms.create(400, 568, PLATFORM_IMAGE).setScale(1 / 16).refreshBody();
 
-    for (let i = 0; i < 4; i++) {
-      this.platforms.create(400 - (i * 32), 568, PLATFORM_IMAGE).setScale(1 / 16).refreshBody();
+    for (let i = 0; i < 30; i++) {
+      this.platforms.create(400 + (i * 32), 568, PLATFORM_IMAGE).setScale(1 / 16).refreshBody();
     }
     this.physics.add.collider(this.player.sprite, this.platforms);
 
@@ -52,8 +52,13 @@ export class PlatformerScene extends Phaser.Scene {
 
 
     // TODO these inputs need to be handled better
-
-    if (this.dKey.isDown) {
+    if (this.dKey.isDown && this.wKey.isDown) {
+      this.player.runRight();
+      this.player.jump();
+    } else if (this.aKey.isDown && this.wKey.isDown) {
+      this.player.runLeft();
+      this.player.jump();
+    } else if (this.dKey.isDown) {
       this.player.runRight();
     } else if (this.aKey.isDown) {
       this.player.runLeft();
