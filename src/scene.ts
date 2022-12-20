@@ -1,23 +1,15 @@
 import * as Phaser from 'phaser';
-import characterRunImage from '../assets/character_run.png';
-import characterIdleImage from '../assets/character_idle.png';
 import platformImage from '../assets/platform_blank.png';
 import bgBlankImage from '../assets/bg_blank.png';
+import { Player } from './player';
 
-const CHARACTER_RUN_SS = 'character_run_ss';
-const CHARACTER_IDLE_SS = 'character_idle_ss';
-const CHARACTER_RUN_RIGHT_AN = 'character_run_right_an';
-const CHARACTER_IDLE_AN = 'character_idle_an';
 const PLATFORMER_SCENE = 'platformer_scene';
 const PLATFORM_IMAGE = 'platform_image';
 const BG_BLANK_IMAGE = 'bg_blank_image';
 
-const PLAYER_X = 400;
-const PLAYER_Y = 400;
-
 export class PlatformerScene extends Phaser.Scene {
 
-  private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  private player: Player;
   private platforms: Phaser.Physics.Arcade.StaticGroup;
 
   private aKey: Phaser.Input.Keyboard.Key;
@@ -29,16 +21,7 @@ export class PlatformerScene extends Phaser.Scene {
   }
 
   preload(): void {
-    this.load.spritesheet(
-      CHARACTER_RUN_SS,
-      characterRunImage,
-      { frameWidth: 128, frameHeight: 64 },
-    );
-    this.load.spritesheet(
-      CHARACTER_IDLE_SS,
-      characterIdleImage,
-      { frameWidth: 128, frameHeight: 64 },
-    );
+    Player.preload(this);
     this.load.image(PLATFORM_IMAGE, platformImage);
     this.load.image(BG_BLANK_IMAGE, bgBlankImage);
   }
@@ -52,13 +35,7 @@ export class PlatformerScene extends Phaser.Scene {
       this.cameras.main.width,
       this.cameras.main.height,
     );
-    this.player = this.physics.add.sprite(PLAYER_X, PLAYER_Y, CHARACTER_IDLE_SS);
-
-    // Game object is larger than the sprite, so we need to adjust the body size
-    this.player.setSize(32, 48);
-    this.player.setOffset((128 - 32) / 2, 16);
-
-    this.player.setCollideWorldBounds(true);
+    this.player = new Player(this);
 
     this.platforms = this.physics.add.staticGroup();
     this.platforms.create(400, 568, PLATFORM_IMAGE).setScale(1 / 16).refreshBody();
@@ -66,29 +43,9 @@ export class PlatformerScene extends Phaser.Scene {
     for (let i = 0; i < 4; i++) {
       this.platforms.create(400 - (i * 32), 568, PLATFORM_IMAGE).setScale(1 / 16).refreshBody();
     }
-    this.physics.add.collider(this.player, this.platforms);
+    this.physics.add.collider(this.player.sprite, this.platforms);
 
-    // Animation for running right
-    this.anims.create({
-      key: CHARACTER_RUN_RIGHT_AN,
-      frames: this.anims.generateFrameNumbers(
-        CHARACTER_RUN_SS,
-        { start: 0, end: 7 }
-      ),
-      frameRate: 10,
-      repeat: -1
-    });
 
-    // Animation for idle
-    this.anims.create({
-      key: CHARACTER_IDLE_AN,
-      frames: this.anims.generateFrameNumbers(
-        CHARACTER_IDLE_SS,
-        { start: 0, end: 7 }
-      ),
-      frameRate: 10,
-      repeat: -1
-    });
   }
 
   update(): void {
@@ -97,20 +54,13 @@ export class PlatformerScene extends Phaser.Scene {
     // TODO these inputs need to be handled better
 
     if (this.dKey.isDown) {
-      this.player.setVelocityX(160);
-
-      this.player.flipX = false;
-      this.player.anims.play(CHARACTER_RUN_RIGHT_AN, true);
+      this.player.runRight();
     } else if (this.aKey.isDown) {
-      this.player.setVelocityX(-160);
-
-      this.player.flipX = true;
-      this.player.anims.play(CHARACTER_RUN_RIGHT_AN, true);
+      this.player.runLeft();
     } else if (this.wKey.isDown) {
-      this.player.setVelocityY(-400);
+      this.player.jump();
     } else {
-      this.player.anims.play(CHARACTER_IDLE_AN, true);
-      this.player.setVelocityX(0);
+      this.player.idle();
     }
   }
 
