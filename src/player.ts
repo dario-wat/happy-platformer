@@ -139,5 +139,7 @@ export class Player {
 
   respawn(x: number = SPAWN_X, y: number = SPAWN_Y): void {
     this.sprite.setPosition(x, y);
+    this.sprite.setVelocity(0);
+    this.sprite.setAcceleration(0);
   }
 }

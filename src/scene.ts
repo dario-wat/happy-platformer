@@ -1,13 +1,14 @@
 import * as Phaser from 'phaser';
 import platformImage from '../assets/platform_blank.png';
 import bgBlankImage from '../assets/bg_blank.png';
+import turretImage from '../assets/turret.png';
 import { Player } from './player';
 import { Blade } from './blade';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const PLATFORM_IMAGE = 'platform_image';
 const BG_BLANK_IMAGE = 'bg_blank_image';
-
+const TURRET_IMAGE = 'turret_image';
 
 export class PlatformerScene extends Phaser.Scene {
 
@@ -28,6 +29,7 @@ export class PlatformerScene extends Phaser.Scene {
     Blade.preload(this);
     this.load.image(PLATFORM_IMAGE, platformImage);
     this.load.image(BG_BLANK_IMAGE, bgBlankImage);
+    this.load.image(TURRET_IMAGE, turretImage);
   }
 
   create(): void {
@@ -49,8 +51,10 @@ export class PlatformerScene extends Phaser.Scene {
     }
     this.physics.add.collider(this.player.sprite, this.platforms);
 
-    this.blades = [new Blade(this, 600, 300, 400, 200)];
-
+    this.blades = [
+      new Blade(this, 600, 300, 400, 200),
+      new Blade(this, 800, 450, 1000, 450),
+    ];
 
     // Respawn the user when they touch the blade
     this.physics.add.overlap(
@@ -58,6 +62,12 @@ export class PlatformerScene extends Phaser.Scene {
       this.blades.map(b => b.sprite),
       () => { this.player.respawn() },
     );
+
+    const turret = this.add.sprite(700, 200, TURRET_IMAGE);
+    turret.setScale(0.2);
+    turret.setAngle(45);
+
+    // TODO Add bullet
   }
 
   update(): void {

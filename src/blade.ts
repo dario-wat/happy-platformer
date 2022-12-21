@@ -9,6 +9,7 @@ export class Blade {
 
   public sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
+  // TODO introduce delay
   constructor(
     scene: Phaser.Scene,
     x1: number,
@@ -28,6 +29,7 @@ export class Blade {
     column.setDisplaySize(16, eucl(x1, y1, x2, y2));
     column.body.setAllowGravity(false);
     column.rotation = angle(x1, y1, x2, y2) + Math.PI / 2;
+    // TODO fix rotation
 
     this.sprite = scene.physics.add.sprite(x1, y1, BLADE_IMAGE);
     this.sprite.setScale(0.1);
