@@ -6,14 +6,19 @@ import characterJumpImage from '../assets/character_jump.png';
 const CHARACTER_RUN_SS = 'character_run_ss';
 const CHARACTER_IDLE_SS = 'character_idle_ss';
 const CHARACTER_JUMP_SS = 'character_jump_ss';
+
 const CHARACTER_RUN_RIGHT_AN = 'character_run_right_an';
 const CHARACTER_IDLE_AN = 'character_idle_an';
 const CHARACTER_JUMP_AN = 'character_jump_an';
 
+const SPAWN_X = 400;
+const SPAWN_Y = 400;
+
 const MAX_VELOCITY = 160;
+const MIN_VELOCITY = 10;
 const JUMP_VELOCITY = 500;
-const ACCELERATION = 160;
-const VELOCITY_THRESHOLD = 10;
+const ACCELERATION = 400;
+const IDLE_DECELERATION = 200;
 
 export class Player {
 
@@ -21,8 +26,8 @@ export class Player {
 
   constructor(
     scene: Phaser.Scene,
-    x: number = 400,
-    y: number = 400,
+    x: number = SPAWN_X,
+    y: number = SPAWN_Y,
   ) {
     this.sprite = scene.physics.add.sprite(x, y, CHARACTER_IDLE_SS);
 
@@ -55,6 +60,7 @@ export class Player {
       repeat: -1
     });
 
+    // TODO, this is not quite right
     // Jump animation
     scene.anims.create({
       key: CHARACTER_JUMP_AN,
@@ -109,13 +115,13 @@ export class Player {
 
   idle(): void {
     // Decelerate to a stop
-    if (Math.abs(this.sprite.body.velocity.x) < VELOCITY_THRESHOLD) {
+    if (Math.abs(this.sprite.body.velocity.x) < MIN_VELOCITY) {
       this.sprite.setVelocityX(0);
       this.sprite.setAccelerationX(0);
     } else if (this.sprite.body.velocity.x > 0) {
-      this.sprite.setAccelerationX(-ACCELERATION);
+      this.sprite.setAccelerationX(-IDLE_DECELERATION);
     } else if (this.sprite.body.velocity.x < 0) {
-      this.sprite.setAccelerationX(ACCELERATION);
+      this.sprite.setAccelerationX(IDLE_DECELERATION);
     }
 
     if (!this.isInAir()) {
@@ -129,5 +135,9 @@ export class Player {
     }
     this.sprite.setVelocityY(-JUMP_VELOCITY);
     this.sprite.anims.play(CHARACTER_JUMP_AN, true);
+  }
+
+  respawn(x: number = SPAWN_X, y: number = SPAWN_Y): void {
+    this.sprite.setPosition(x, y);
   }
 }
