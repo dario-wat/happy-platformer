@@ -4,6 +4,7 @@ import bgBlankImage from '../assets/bg_blank.png';
 import turretImage from '../assets/turret.png';
 import { Player } from './player';
 import { Blade } from './blade';
+import levels from './levels';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const PLATFORM_IMAGE = 'platform_image';
