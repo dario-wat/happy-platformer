@@ -15,7 +15,7 @@ const TURRET_IMAGE = 'turret_image';
 export class PlatformerScene extends Phaser.Scene {
 
   private player: Player;
-  private blades: Blade[];
+  private blades: Blade[];    // TODO use a group for this
   private platforms: Phaser.Physics.Arcade.StaticGroup;
 
   private keys: KeyboardInput;
@@ -41,11 +41,19 @@ export class PlatformerScene extends Phaser.Scene {
     );
     this.player = new Player(this);
 
-    this.platforms = this.physics.add.staticGroup();
-    this.platforms.create(400, 568, PLATFORM_IMAGE).setScale(1 / 16).refreshBody();
+    // TODO when to use groups?
+    // this.physics.add.group
 
-    for (let i = 0; i < 30; i++) {
-      this.platforms.create(400 + (i * 32), 568, PLATFORM_IMAGE).setScale(1 / 16).refreshBody();
+    this.platforms = this.physics.add.staticGroup();
+
+    for (const platform of levels.levels[0].platforms) {
+      for (let i = 0; i < platform.count; i++) {
+        this.platforms.create(
+          platform.x + (platform.isVertical ? 0 : i * 32),
+          platform.y + (platform.isVertical ? i * 32 : 0),
+          PLATFORM_IMAGE,
+        ).setScale(1 / 16).refreshBody();
+      }
     }
     this.physics.add.collider(this.player.sprite, this.platforms);
 

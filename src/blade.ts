@@ -36,7 +36,14 @@ export class Blade {
     this.sprite.setCircle(this.sprite.width / 2);
     this.sprite.body.setAllowGravity(false);
 
-    // TODO create spinning animation
+    // Rotate animation
+    scene.tweens.add({
+      targets: this.sprite,
+      angle: 360,
+      duration: 1000,
+      ease: 'Linear',
+      repeat: -1,
+    });
 
     // Make the blade move between two points
     scene.tweens.add({
