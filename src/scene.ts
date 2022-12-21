@@ -1,16 +1,19 @@
 import * as Phaser from 'phaser';
 import platformImage from '../assets/platform_blank.png';
 import bgBlankImage from '../assets/bg_blank.png';
+import bladeImage from '../assets/blade.png';
 import { Player } from './player';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const PLATFORM_IMAGE = 'platform_image';
 const BG_BLANK_IMAGE = 'bg_blank_image';
+const BLADE_IMAGE = 'blade_image';
 
 export class PlatformerScene extends Phaser.Scene {
 
   private player: Player;
   private platforms: Phaser.Physics.Arcade.StaticGroup;
+  private blade: Phaser.GameObjects.Sprite;
 
   private aKey: Phaser.Input.Keyboard.Key;
   private dKey: Phaser.Input.Keyboard.Key;
@@ -24,6 +27,7 @@ export class PlatformerScene extends Phaser.Scene {
     Player.preload(this);
     this.load.image(PLATFORM_IMAGE, platformImage);
     this.load.image(BG_BLANK_IMAGE, bgBlankImage);
+    this.load.image(BLADE_IMAGE, bladeImage);
   }
 
   create(): void {
@@ -45,10 +49,12 @@ export class PlatformerScene extends Phaser.Scene {
     }
     this.physics.add.collider(this.player.sprite, this.platforms);
 
-
+    this.blade = this.add.sprite(600, 300, BLADE_IMAGE).setScale(0.1);
   }
 
   update(): void {
+    // Rotate the blade
+    this.blade.angle += 5;
 
 
     // TODO these inputs need to be handled better

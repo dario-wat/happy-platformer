@@ -10,8 +10,10 @@ const CHARACTER_RUN_RIGHT_AN = 'character_run_right_an';
 const CHARACTER_IDLE_AN = 'character_idle_an';
 const CHARACTER_JUMP_AN = 'character_jump_an';
 
-const VELOCITY = 160;
-const JUMP_VELOCITY = -500;
+const MAX_VELOCITY = 160;
+const JUMP_VELOCITY = 500;
+const ACCELERATION = 160;
+const VELOCITY_THRESHOLD = 10;
 
 export class Player {
 
@@ -28,6 +30,7 @@ export class Player {
     this.sprite.setSize(32, 48);    // Measured manually
     this.sprite.setOffset(48, 16);  // Offset x = (frame width - size X) / 2
 
+    this.sprite.setMaxVelocity(MAX_VELOCITY, JUMP_VELOCITY);
     this.sprite.setCollideWorldBounds(true);
 
     // Animation for running right
@@ -87,36 +90,44 @@ export class Player {
   }
 
   runRight(): void {
-    if (this.isInAir()) {
-      return;
-    }
-    this.sprite.setVelocityX(VELOCITY);
+    this.sprite.setAccelerationX(ACCELERATION);
     this.sprite.flipX = false;
-    this.sprite.anims.play(CHARACTER_RUN_RIGHT_AN, true);
+
+    if (!this.isInAir()) {
+      this.sprite.anims.play(CHARACTER_RUN_RIGHT_AN, true);
+    }
   }
 
   runLeft(): void {
-    if (this.isInAir()) {
-      return;
-    }
-    this.sprite.setVelocityX(-VELOCITY);
+    this.sprite.setAccelerationX(-ACCELERATION);
     this.sprite.flipX = true;
-    this.sprite.anims.play(CHARACTER_RUN_RIGHT_AN, true);
+
+    if (!this.isInAir()) {
+      this.sprite.anims.play(CHARACTER_RUN_RIGHT_AN, true);
+    }
   }
 
   idle(): void {
-    if (this.isInAir()) {
-      return;
+    // Decelerate to a stop
+    if (Math.abs(this.sprite.body.velocity.x) < VELOCITY_THRESHOLD) {
+      this.sprite.setVelocityX(0);
+      this.sprite.setAccelerationX(0);
+    } else if (this.sprite.body.velocity.x > 0) {
+      this.sprite.setAccelerationX(-ACCELERATION);
+    } else if (this.sprite.body.velocity.x < 0) {
+      this.sprite.setAccelerationX(ACCELERATION);
     }
-    this.sprite.setVelocityX(0);
-    this.sprite.anims.play(CHARACTER_IDLE_AN, true);
+
+    if (!this.isInAir()) {
+      this.sprite.anims.play(CHARACTER_IDLE_AN, true);
+    }
   }
 
   jump(): void {
     if (this.isInAir()) {
       return;
     }
-    this.sprite.setVelocityY(JUMP_VELOCITY);
+    this.sprite.setVelocityY(-JUMP_VELOCITY);
     this.sprite.anims.play(CHARACTER_JUMP_AN, true);
   }
 }
