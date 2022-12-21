@@ -5,6 +5,7 @@ import turretImage from '../assets/turret.png';
 import { Player } from './player';
 import { Blade } from './blade';
 import levels from './levels';
+import { KeyboardInput } from './keyboard_input';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const PLATFORM_IMAGE = 'platform_image';
@@ -17,9 +18,7 @@ export class PlatformerScene extends Phaser.Scene {
   private blades: Blade[];
   private platforms: Phaser.Physics.Arcade.StaticGroup;
 
-  private aKey: Phaser.Input.Keyboard.Key;
-  private dKey: Phaser.Input.Keyboard.Key;
-  private wKey: Phaser.Input.Keyboard.Key;
+  private keys: KeyboardInput;
 
   constructor() {
     super({ key: PLATFORMER_SCENE });
@@ -34,9 +33,7 @@ export class PlatformerScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.keys = new KeyboardInput(this);
 
     this.add.image(0, 0, BG_BLANK_IMAGE).setOrigin(0, 0).setDisplaySize(
       this.cameras.main.width,
@@ -78,17 +75,17 @@ export class PlatformerScene extends Phaser.Scene {
 
 
     // TODO these inputs need to be handled better
-    if (this.dKey.isDown && this.wKey.isDown) {
+    if (this.keys.d.isDown && this.keys.w.isDown) {
       this.player.runRight();
       this.player.jump();
-    } else if (this.aKey.isDown && this.wKey.isDown) {
+    } else if (this.keys.a.isDown && this.keys.w.isDown) {
       this.player.runLeft();
       this.player.jump();
-    } else if (this.dKey.isDown) {
+    } else if (this.keys.d.isDown) {
       this.player.runRight();
-    } else if (this.aKey.isDown) {
+    } else if (this.keys.a.isDown) {
       this.player.runLeft();
-    } else if (this.wKey.isDown) {
+    } else if (this.keys.w.isDown) {
       this.player.jump();
       this.player.idle();
     } else {
