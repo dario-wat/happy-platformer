@@ -1,35 +1,36 @@
 import * as Phaser from 'phaser';
-import bladeImage from '../assets/blade.png';
-import bladeColumnImage from '../assets/blade_column.png';
+import bladeImage from '../../assets/blade.png';
+import bladeColumnImage from '../../assets/blade_column.png';
 import { DynamicSprite } from './sprite';
+import { angleBetween, distanceBetween } from '../util';
 
 const BLADE_IMAGE = 'blade_image';
 const BLADE_COLUMN_IMAGE = 'blade_column_image';
 
-export class Blade extends DynamicSprite {
+const BLADE_COLUMN_WIDTH = 16;
+const BLADE_SCALE = 0.1;
 
-  // TODO introduce delay
+export default class Blade extends DynamicSprite {
+
   constructor(
     scene: Phaser.Scene,
     x1: number,
     y1: number,
     x2: number,
     y2: number,
+    delay: number = 0,
   ) {
     super(scene, x1, y1, BLADE_IMAGE);
 
-    const centerX = (x1 + x2) / 2;
-    const centerY = (y1 + y2) / 2;
-    const column = scene.physics.add.sprite(centerX, centerY, BLADE_COLUMN_IMAGE);
-    column.setDisplaySize(16, Phaser.Math.Distance.Between(x1, y1, x2, y2));
-    column.body.setAllowGravity(false);
-    column.rotation = Phaser.Math.Angle.Between(x1, y1, x2, y2) + Math.PI / 2;
+    // Add a column to the blade
+    const column = scene.add.sprite((x1 + x2) / 2, (y1 + y2) / 2, BLADE_COLUMN_IMAGE);
+    column.setDisplaySize(BLADE_COLUMN_WIDTH, distanceBetween(x1, y1, x2, y2));
+    column.rotation = angleBetween(x1, y1, x2, y2) + Math.PI / 2;
 
-    // TODO fix rotation
-
+    // Blade config
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.setScale(0.1);
+    this.setScale(BLADE_SCALE);
     this.setCircle(this.width / 2);
     this.body.setAllowGravity(false);
 
@@ -51,6 +52,7 @@ export class Blade extends DynamicSprite {
       duration: 2000,
       yoyo: true,
       repeat: -1,
+      delay,
     });
   }
 

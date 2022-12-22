@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
 
-export class KeyboardInput {
+export default class KeyboardInput {
 
   public a: Phaser.Input.Keyboard.Key;
   public d: Phaser.Input.Keyboard.Key;
