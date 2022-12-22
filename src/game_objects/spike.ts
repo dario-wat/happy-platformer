@@ -1,12 +1,12 @@
 import * as Phaser from 'phaser';
 import spikeImage from '../../assets/spike.png';
-import { DynamicSprite } from './sprite';
+import { StaticSprite } from './sprite';
 
 const SPIKE_IMAGE = 'spike_image';
 
 const SIZE = 32;
 
-export default class Spike extends DynamicSprite {
+export default class Spike extends StaticSprite {
 
   constructor(
     scene: Phaser.Scene,
@@ -15,11 +15,9 @@ export default class Spike extends DynamicSprite {
   ) {
     super(scene, x, y, SPIKE_IMAGE);
     scene.add.existing(this);
-    scene.physics.add.existing(this);
+    scene.physics.add.existing(this, true);
 
     this.setDisplaySize(SIZE, SIZE);
-    this.body.setAllowGravity(false);
-    this.body.setImmovable(true);
     this.refreshBody();
   }
 

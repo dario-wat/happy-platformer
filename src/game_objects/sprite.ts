@@ -7,3 +7,11 @@ export class DynamicSprite
   public body: Phaser.Physics.Arcade.Body;
 
 }
+
+export class StaticSprite
+  extends Phaser.Physics.Arcade.Sprite
+  implements Phaser.Types.Physics.Arcade.SpriteWithStaticBody {
+
+  public body: Phaser.Physics.Arcade.StaticBody;
+
+}
