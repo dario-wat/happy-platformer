@@ -20,23 +20,27 @@ const JUMP_VELOCITY = 500;
 const ACCELERATION = 400;
 const IDLE_DECELERATION = 200;
 
-export class Player {
+export class Player
+  extends Phaser.Physics.Arcade.Sprite
+  implements Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
 
-  public sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  public body: Phaser.Physics.Arcade.Body;
 
   constructor(
     scene: Phaser.Scene,
     x: number = SPAWN_X,
     y: number = SPAWN_Y,
   ) {
-    this.sprite = scene.physics.add.sprite(x, y, CHARACTER_IDLE_SS);
+    super(scene, x, y, CHARACTER_IDLE_SS);
+    scene.add.existing(this);
+    scene.physics.add.existing(this);
 
     // Game object is larger than the sprite, so we need to adjust the body size
-    this.sprite.setSize(32, 48);    // Measured manually
-    this.sprite.setOffset(48, 16);  // Offset x = (frame width - size X) / 2
+    this.setSize(32, 48);    // Measured manually
+    this.setOffset(48, 16);  // Offset x = (frame width - size X) / 2
 
-    this.sprite.setMaxVelocity(MAX_VELOCITY, JUMP_VELOCITY);
-    this.sprite.setCollideWorldBounds(true);
+    this.setMaxVelocity(MAX_VELOCITY, JUMP_VELOCITY);
+    this.setCollideWorldBounds(true);
 
     // Animation for running right
     scene.anims.create({
@@ -92,40 +96,40 @@ export class Player {
   }
 
   private isInAir(): boolean {
-    return !this.sprite.body.blocked.down;
+    return !this.body.blocked.down;
   }
 
   runRight(): void {
-    this.sprite.setAccelerationX(ACCELERATION);
-    this.sprite.flipX = false;
+    this.setAccelerationX(ACCELERATION);
+    this.flipX = false;
 
     if (!this.isInAir()) {
-      this.sprite.anims.play(CHARACTER_RUN_RIGHT_AN, true);
+      this.anims.play(CHARACTER_RUN_RIGHT_AN, true);
     }
   }
 
   runLeft(): void {
-    this.sprite.setAccelerationX(-ACCELERATION);
-    this.sprite.flipX = true;
+    this.setAccelerationX(-ACCELERATION);
+    this.flipX = true;
 
     if (!this.isInAir()) {
-      this.sprite.anims.play(CHARACTER_RUN_RIGHT_AN, true);
+      this.anims.play(CHARACTER_RUN_RIGHT_AN, true);
     }
   }
 
   idle(): void {
     // Decelerate to a stop
-    if (Math.abs(this.sprite.body.velocity.x) < MIN_VELOCITY) {
-      this.sprite.setVelocityX(0);
-      this.sprite.setAccelerationX(0);
-    } else if (this.sprite.body.velocity.x > 0) {
-      this.sprite.setAccelerationX(-IDLE_DECELERATION);
-    } else if (this.sprite.body.velocity.x < 0) {
-      this.sprite.setAccelerationX(IDLE_DECELERATION);
+    if (Math.abs(this.body.velocity.x) < MIN_VELOCITY) {
+      this.setVelocityX(0);
+      this.setAccelerationX(0);
+    } else if (this.body.velocity.x > 0) {
+      this.setAccelerationX(-IDLE_DECELERATION);
+    } else if (this.body.velocity.x < 0) {
+      this.setAccelerationX(IDLE_DECELERATION);
     }
 
     if (!this.isInAir()) {
-      this.sprite.anims.play(CHARACTER_IDLE_AN, true);
+      this.anims.play(CHARACTER_IDLE_AN, true);
     }
   }
 
@@ -133,13 +137,13 @@ export class Player {
     if (this.isInAir()) {
       return;
     }
-    this.sprite.setVelocityY(-JUMP_VELOCITY);
-    this.sprite.anims.play(CHARACTER_JUMP_AN, true);
+    this.setVelocityY(-JUMP_VELOCITY);
+    this.anims.play(CHARACTER_JUMP_AN, true);
   }
 
   respawn(x: number = SPAWN_X, y: number = SPAWN_Y): void {
-    this.sprite.setPosition(x, y);
-    this.sprite.setVelocity(0);
-    this.sprite.setAcceleration(0);
+    this.setPosition(x, y);
+    this.setVelocity(0);
+    this.setAcceleration(0);
   }
 }

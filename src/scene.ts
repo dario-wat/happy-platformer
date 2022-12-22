@@ -40,6 +40,7 @@ export class PlatformerScene extends Phaser.Scene {
       this.cameras.main.height,
     );
     this.player = new Player(this);
+    // this.physics.add.existing(this.player);
 
     // TODO when to use groups?
     // this.physics.add.group
@@ -55,7 +56,7 @@ export class PlatformerScene extends Phaser.Scene {
         ).setScale(1 / 16).refreshBody();
       }
     }
-    this.physics.add.collider(this.player.sprite, this.platforms);
+    this.physics.add.collider(this.player, this.platforms);
 
     this.blades = [
       new Blade(this, 600, 300, 400, 200),
@@ -64,7 +65,7 @@ export class PlatformerScene extends Phaser.Scene {
 
     // Respawn the user when they touch the blade
     this.physics.add.overlap(
-      this.player.sprite,
+      this.player,
       this.blades.map(b => b.sprite),
       () => { this.player.respawn() },
     );
