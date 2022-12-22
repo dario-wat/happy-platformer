@@ -2,6 +2,7 @@ import * as Phaser from 'phaser';
 import characterRunImage from '../assets/character_run.png';
 import characterIdleImage from '../assets/character_idle.png';
 import characterJumpImage from '../assets/character_jump.png';
+import { DynamicSprite } from './sprite';
 
 const CHARACTER_RUN_SS = 'character_run_ss';
 const CHARACTER_IDLE_SS = 'character_idle_ss';
@@ -20,11 +21,7 @@ const JUMP_VELOCITY = 500;
 const ACCELERATION = 400;
 const IDLE_DECELERATION = 200;
 
-export class Player
-  extends Phaser.Physics.Arcade.Sprite
-  implements Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
-
-  public body: Phaser.Physics.Arcade.Body;
+export class Player extends DynamicSprite {
 
   constructor(
     scene: Phaser.Scene,

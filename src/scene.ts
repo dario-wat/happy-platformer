@@ -66,7 +66,7 @@ export class PlatformerScene extends Phaser.Scene {
     // Respawn the user when they touch the blade
     this.physics.add.overlap(
       this.player,
-      this.blades.map(b => b.sprite),
+      this.blades,
       () => { this.player.respawn() },
     );
 
