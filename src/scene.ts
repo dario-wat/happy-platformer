@@ -11,6 +11,7 @@ import KeyboardInput from './keyboard_input';
 import Spike from './game_objects/spike';
 import Turret from './game_objects/turret';
 import Bullet from './game_objects/bullet';
+import BulletManager from './bullet_manager';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const PLATFORM_IMAGE = 'platform_image';
@@ -26,7 +27,8 @@ export class PlatformerScene extends Phaser.Scene {
   private player: Player;
   private blades: Blade[];    // TODO use a group for this
   private platforms: Phaser.Physics.Arcade.StaticGroup;
-  private bullet: Phaser.GameObjects.Sprite;
+
+  private bulletManager: BulletManager;
 
   private keys: KeyboardInput;
 
@@ -75,7 +77,6 @@ export class PlatformerScene extends Phaser.Scene {
 
     // Add spikes
     const spike = new Spike(this, 600, 400);
-    console.log(spike);
     this.physics.add.overlap(
       this.player,
       spike,
@@ -91,22 +92,31 @@ export class PlatformerScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.blades,
-      () => { this.player.respawn() },
+      () => this.player.respawn(),
     );
 
-    const turret = new Turret(this, 700, 200, 0, 90);
+    this.bulletManager = BulletManager.create(this);
+
+    const turret = new Turret(this, this.player, 700, 200,);
+    new Turret(this, this.player, 900, 200, 1000);
+
+    this.physics.add.overlap(
+      this.player,
+      this.bulletManager.bullets,
+      (player: Player, bullet: Bullet) => {
+        player.respawn();
+        bullet.destroy();
+      },
+    )
+
 
 
     const doorClosed = this.add.sprite(1000, 400, DOOR_CLOSED_IMAGE).setScale(0.1);
     const doorOpen = this.add.sprite(800, 400, DOOR_OPEN_IMAGE).setScale(0.1);
 
-    // TODO Add bullet
-    this.bullet = new Bullet(this, 700, 200, 135, 100);
-
   }
 
   update(): void {
-    // this.bullet.anims.play('bullet_animation', true);
 
     // TODO these inputs need to be handled better
     if (this.keys.d.isDown && this.keys.w.isDown) {

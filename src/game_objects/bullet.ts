@@ -1,9 +1,12 @@
 import * as Phaser from 'phaser';
 import bulletImage from '../../assets/bullet.png';
+import BulletManager from '../bullet_manager';
 import { DynamicSprite } from './sprite';
 
 const BULLET_IMAGE = 'bullet_image';
 const BULLET_ANIMATION = 'bullet_animation';
+
+const SPEED = 200;
 
 export default class Bullet extends DynamicSprite {
 
@@ -11,16 +14,17 @@ export default class Bullet extends DynamicSprite {
     scene: Phaser.Scene,
     x: number,
     y: number,
-    angle: number,
-    speed: number,
+    angleInRad: number,
+    speed: number = SPEED,
   ) {
     super(scene, x, y, BULLET_IMAGE);
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
     this.body.setAllowGravity(false);
-    this.setAngle(angle);
-    this.setVelocity(speed * Math.cos(angle), speed * Math.sin(angle));
+    this.setVelocity(speed * Math.cos(angleInRad), speed * Math.sin(angleInRad));
+
+    BulletManager.get().add(this);
 
     this.anims.create({
       key: BULLET_ANIMATION,
@@ -34,11 +38,15 @@ export default class Bullet extends DynamicSprite {
 
     this.anims.play(BULLET_ANIMATION, true);
 
-    // TODO this will need to be fixed once the levels are bounded
-    // Destroy if it goes off screen
+    // Remove bullet after it leaves the screen
     this.scene.events.on('update', () => {
-      if (this.x < 0 || this.x > this.scene.cameras.main.width ||
-        this.y < 0 || this.y > this.scene.cameras.main.height) {
+      if (!this.scene) {
+        return;
+      }
+      if (
+        this.x < 0 || this.x > this.scene.sys.canvas.width
+        || this.y < 0 || this.y > this.scene.sys.canvas.height
+      ) {
         this.destroy();
       }
     });

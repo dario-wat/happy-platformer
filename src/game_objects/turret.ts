@@ -1,5 +1,9 @@
 import * as Phaser from 'phaser';
 import turretImage from '../../assets/turret.png';
+import { PlatformerScene } from '../scene';
+import { angleBetween } from '../util';
+import Bullet from './bullet';
+import Player from './player';
 
 const TURRET_IMAGE = 'turret_image';
 
@@ -10,10 +14,10 @@ export default class Turret extends Phaser.GameObjects.Sprite {
 
   constructor(
     scene: Phaser.Scene,
+    private player: Player,
     x: number,
     y: number,
-    startAngle: number,
-    endAngle: number,
+    startDelay: number = 0,
   ) {
     super(scene, x, y, TURRET_IMAGE);
     scene.add.existing(this);
@@ -21,19 +25,39 @@ export default class Turret extends Phaser.GameObjects.Sprite {
     this.setOrigin(ORIGIN_X, 0.5);
     this.setScale(SCALE);
 
-    this.setAngle(startAngle);
-    this.scene.tweens.add({
-      targets: this,
-      angle: endAngle,
-      duration: 2000,
-      ease: 'Sine.easeInOut',
-      yoyo: true,
-      repeat: -1,
+    // Turret should always face the player
+    this.scene.events.on('update', () => {
+      const angle = angleBetween(
+        this.player.x,
+        this.player.y,
+        this.x,
+        this.y,
+      );
+      this.setRotation(angle);
     });
 
+    // Fire bullet every X seconds
+    this.scene.time.addEvent({
+      delay: 3000,
+      callback: this.fireBullet,
+      callbackScope: this,
+      loop: true,
+      startAt: startDelay,
+    });
   }
 
   static preload(scene: Phaser.Scene): void {
     scene.load.image(TURRET_IMAGE, turretImage);
+  }
+
+  private fireBullet(): void {
+    const rotation = this.rotation + Math.PI;
+    const width = this.width * SCALE * ORIGIN_X;
+    new Bullet(
+      this.scene,
+      this.x + width * Math.cos(rotation),
+      this.y + width * Math.sin(rotation),
+      rotation,
+    );
   }
 }
