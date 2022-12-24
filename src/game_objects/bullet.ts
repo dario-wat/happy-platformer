@@ -1,6 +1,7 @@
 import * as Phaser from 'phaser';
 import bulletImage from '../../assets/bullet.png';
 import BulletManager from '../bullet_manager';
+import { PlatformerScene } from '../scene';
 import { DynamicSprite } from './sprite';
 
 const BULLET_IMAGE = 'bullet_image';
@@ -12,7 +13,7 @@ const SIZE = 12;
 export default class Bullet extends DynamicSprite {
 
   constructor(
-    scene: Phaser.Scene,
+    scene: PlatformerScene,
     x: number,
     y: number,
     angleInRad: number,
@@ -27,7 +28,7 @@ export default class Bullet extends DynamicSprite {
     this.setCircle(this.width / 2);
     this.setVelocity(speed * Math.cos(angleInRad), speed * Math.sin(angleInRad));
 
-    BulletManager.get().add(this);
+    scene.bulletManager.add(this);
 
     this.anims.create({
       key: BULLET_ANIMATION,

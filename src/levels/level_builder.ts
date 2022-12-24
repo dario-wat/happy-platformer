@@ -8,6 +8,7 @@ import Turret, { TURRET_GRID_SIZE } from '../game_objects/turret';
 import Player from '../game_objects/player';
 import Blade, { BLADE_GRID_SIZE } from '../game_objects/blade';
 import Gate, { GATE_GRID_SIZE } from '../game_objects/gate';
+import { PlatformerScene } from '../scene';
 
 const LEVEL_X = 200;
 const LEVEL_Y = 100;
@@ -48,16 +49,14 @@ function cy(y: number, size: number = 1): number {
 
 export default class LevelBuilder {
 
-  private static instance: LevelBuilder;
-
   public platforms: Phaser.Physics.Arcade.StaticGroup;
   public spikes: Phaser.Physics.Arcade.StaticGroup;
   public blades: Phaser.Physics.Arcade.Group
   public startGate: Gate;
   public endGate: Gate;
 
-  private constructor(
-    private scene: Phaser.Scene,
+  constructor(
+    private scene: PlatformerScene,
     private player: Player,
   ) {
     this.platforms = scene.physics.add.staticGroup();
@@ -69,20 +68,6 @@ export default class LevelBuilder {
     this.blades.defaults = emptyDefaults;
   }
 
-  static create(scene: Phaser.Scene, player: Player): LevelBuilder {
-    if (!LevelBuilder.instance) {
-      LevelBuilder.instance = new LevelBuilder(scene, player);
-    }
-    return LevelBuilder.instance;
-  }
-
-  static get(): LevelBuilder {
-    if (!LevelBuilder.instance) {
-      throw new Error('LevelBuilder not initialized');
-    }
-    return LevelBuilder.instance;
-  }
-
   buildLevel(level: number): void {
     this.buildBoundingPlatforms();
     this.buildPlatforms(level);
@@ -90,6 +75,7 @@ export default class LevelBuilder {
     this.buildTurrets(level);
     this.buildBlades(level);
     this.buildGates(level);
+    this.drawLevel(level);
 
     if (DEBUG_GRID) {
       this.debugGrid();
@@ -128,6 +114,10 @@ export default class LevelBuilder {
   }
 
   private buildPlatforms(level: number): void {
+    if (!levels[level].platforms) {
+      return;
+    }
+
     for (const platform of levels[level].platforms) {
       this.platforms.add(new Platform(
         this.scene,
@@ -140,6 +130,10 @@ export default class LevelBuilder {
   }
 
   private buildSpikes(level: number): void {
+    if (!levels[level].spikes) {
+      return;
+    }
+
     for (const spike of levels[level].spikes) {
       this.spikes.add(new Spike(
         this.scene,
@@ -151,10 +145,13 @@ export default class LevelBuilder {
   }
 
   private buildTurrets(level: number): void {
+    if (!levels[level].turrets) {
+      return;
+    }
+
     for (const turret of levels[level].turrets) {
       new Turret(
         this.scene,
-        this.player,
         cx(turret.x, TURRET_GRID_SIZE),
         cy(turret.y, TURRET_GRID_SIZE),
         turret.startDelay,
@@ -163,6 +160,10 @@ export default class LevelBuilder {
   }
 
   private buildBlades(level: number): void {
+    if (!levels[level].blades) {
+      return;
+    }
+
     for (const blade of levels[level].blades) {
       this.blades.add(new Blade(
         this.scene,
@@ -178,19 +179,28 @@ export default class LevelBuilder {
   private buildGates(level: number): void {
     this.startGate = new Gate(
       this.scene,
-      this.player,
       cx(levels[level].startGate.x, GATE_GRID_SIZE),
       cy(levels[level].startGate.y, GATE_GRID_SIZE),
       true,
     );
     this.endGate = new Gate(
       this.scene,
-      this.player,
       cx(levels[level].endGate.x, GATE_GRID_SIZE),
       cy(levels[level].endGate.y, GATE_GRID_SIZE),
       false,
     );
   }
+
+  private drawLevel(level: number): void {
+    const levelData = levels[level];
+    // Draw level number into the scene
+    this.scene.add.text(
+      ox(LEVEL_WIDTH / 2),
+      oy(LEVEL_HEIGHT / 2),
+      level.toString(),
+      { color: '#ff0000', font: '48px Arial' },
+    ).setOrigin(0.5, 0.5);
+  };
 
   private debugGrid(): void {
     // Draw index numbers above the grid

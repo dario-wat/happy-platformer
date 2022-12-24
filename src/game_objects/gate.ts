@@ -3,7 +3,6 @@ import { DynamicSprite } from './sprite';
 import doorClosedImage from '../../assets/door_closed.png';
 import doorOpenImage from '../../assets/door_open.png';
 import laserDoorImage from '../../assets/laser_door.png';
-import Player from './player';
 
 const DOOR_OPEN_IMAGE = 'door_open_image';
 const DOOR_CLOSED_IMAGE = 'door_closed_image';
@@ -21,7 +20,6 @@ export default class Gate extends DynamicSprite {
 
   constructor(
     scene: Phaser.Scene,
-    private player: Player,
     x: number,
     y: number,
     isStartGate: boolean,

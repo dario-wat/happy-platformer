@@ -20,11 +20,6 @@ const levels = [
       { x: 33, y: 7, length: 3, isVertical: false },
       { x: 32, y: 4, length: 3, isVertical: true },
     ],
-    spikes: [
-      { x: 9, y: 19, direction: SpikeDirection.UP },
-      { x: 10, y: 19, direction: SpikeDirection.UP },
-      { x: 11, y: 19, direction: SpikeDirection.UP },
-    ],
     turrets: [
       { x: 10, y: 5, startDelay: 0 },
     ],
@@ -35,7 +30,29 @@ const levels = [
     lasers: [
       { x: 400, y: 500 }
     ],
-  }
+  },
+  {
+    level: 0,
+    startGate: { x: 3, y: 0 },
+    endGate: { x: 15, y: 0 },
+    platforms: [
+      { x: 3, y: 3, length: 30, isVertical: false },
+      { x: 33, y: 7, length: 3, isVertical: false },
+      { x: 32, y: 4, length: 3, isVertical: true },
+    ],
+    spikes: [
+      { x: 9, y: 19, direction: SpikeDirection.UP },
+      { x: 10, y: 19, direction: SpikeDirection.UP },
+      { x: 11, y: 19, direction: SpikeDirection.UP },
+    ],
+    blades: [
+      { x1: 14, y1: 4, x2: 16, y2: 8, delay: 0 },
+      { x1: 20, y1: 17, x2: 26, y2: 17, delay: 0 },
+    ],
+    lasers: [
+      { x: 400, y: 500 }
+    ],
+  },
 ];
 
 export default levels;

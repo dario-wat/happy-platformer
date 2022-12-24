@@ -10,15 +10,17 @@ import BulletManager from './bullet_manager';
 import Platform from './game_objects/platform';
 import LevelBuilder from './levels/level_builder';
 import Gate from './game_objects/gate';
+import levels from './levels/levels';
+import { distanceBetween } from './util';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const BG_BLANK_IMAGE = 'bg_blank_image';
 
 export class PlatformerScene extends Phaser.Scene {
 
-  private player: Player;
+  public player: Player;
 
-  private bulletManager: BulletManager;
+  public bulletManager: BulletManager;
   private levelBuilder: LevelBuilder;
 
   private keys: KeyboardInput;
@@ -38,15 +40,16 @@ export class PlatformerScene extends Phaser.Scene {
     this.load.image(BG_BLANK_IMAGE, bgBlankImage);
   }
 
-  create(): void {
+  create(data: any): void {
     this.keys = new KeyboardInput(this);
 
     this.player = new Player(this);
 
-    this.bulletManager = BulletManager.create(this);
+    this.bulletManager = new BulletManager(this);
 
-    this.levelBuilder = LevelBuilder.create(this, this.player);
-    this.levelBuilder.buildLevel(0);
+    const level = data.level || 0;
+    this.levelBuilder = new LevelBuilder(this, this.player);
+    this.levelBuilder.buildLevel(level);
 
     this.player.respawnAtGate(this.levelBuilder.startGate);
 
@@ -83,6 +86,34 @@ export class PlatformerScene extends Phaser.Scene {
     //   this.cameras.main.width,
     //   this.cameras.main.height,
     // );
+
+    this.physics.add.overlap(
+      this.player,
+      this.levelBuilder.endGate,
+      () => {
+        const distance = distanceBetween(
+          this.player.x,
+          this.player.y,
+          this.levelBuilder.endGate.x,
+          this.levelBuilder.endGate.y,
+        );
+
+        const distanceTrigger = 10;
+        if (distance > distanceTrigger) {
+          return;
+        }
+
+        // Destroy this scene and start a new one with the next level
+        if (level === levels.length - 1) {
+          // TODO
+          // this.scene.start('game_over_scene');
+          this.scene.restart({ level: 0 });
+        } else {
+          this.scene.restart({ level: level + 1 });
+        }
+      }
+    );
+
   }
 
   update(): void {

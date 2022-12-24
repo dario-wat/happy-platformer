@@ -1,6 +1,7 @@
 import * as Phaser from 'phaser';
 import turretImage from '../../assets/turret.png';
 import { CELL_SIZE } from '../consts';
+import { PlatformerScene } from '../scene';
 import { angleBetween } from '../util';
 import Bullet from './bullet';
 import Player from './player';
@@ -18,8 +19,7 @@ const BULLET_FIRE_DELAY = 3000;
 export default class Turret extends Phaser.GameObjects.Sprite {
 
   constructor(
-    scene: Phaser.Scene,
-    private player: Player,
+    public scene: PlatformerScene,
     x: number,
     y: number,
     startDelay: number = 0,
@@ -33,8 +33,8 @@ export default class Turret extends Phaser.GameObjects.Sprite {
     // Turret should always face the player
     this.scene.events.on('update', () => {
       const angle = angleBetween(
-        this.player.x,
-        this.player.y,
+        scene.player.x,
+        scene.player.y,
         this.x,
         this.y,
       );
