@@ -7,7 +7,7 @@ import { SpikeDirection } from '../enums';
     - spike = 1x1
     - turret = 2x2
     - blade = 2x2
-  The objects are always placed in the center of the grid cell.  
+  (x,y) coordinates indicate the top left cell of the object
 */
 
 const levels = [

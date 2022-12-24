@@ -4,9 +4,9 @@ import { CELL_SIZE, DEBUG_GRID } from '../consts';
 import Platform from '../game_objects/platform';
 import Spike from '../game_objects/spike';
 import { debugLine, debugPoint, emptyDefaults } from '../util';
-import Turret from '../game_objects/turret';
+import Turret, { TURRET_GRID_SIZE } from '../game_objects/turret';
 import Player from '../game_objects/player';
-import Blade from '../game_objects/blade';
+import Blade, { BLADE_GRID_SIZE } from '../game_objects/blade';
 
 const LEVEL_X = 200;
 const LEVEL_Y = 100;
@@ -20,8 +20,13 @@ const LEVEL_HEIGHT = 20;
 /* 
   Level builder is built as a grid of cells. We use the following
   functions to convert between cell coordinates and pixel coordinates.
+  
   ox and oy convert the grid coordinates into top left pixel coordinates.
   cx and cy convert the grid coordiantes into center pixel coordinates.
+  
+  cx and cy additionally take a size parameter, which is the number of
+  cells the object spans. This is used to calculate the center of the
+  object.
 */
 
 function ox(x: number): number {
@@ -32,15 +37,13 @@ function oy(y: number): number {
   return Y_ORIGIN + y * CELL_SIZE;
 }
 
-function cx(x: number): number {
-  return ox(x) + CELL_SIZE / 2;
+function cx(x: number, size: number = 1): number {
+  return ox(x) + CELL_SIZE * size / 2;
 }
 
-function cy(y: number): number {
-  return oy(y) + CELL_SIZE / 2;
+function cy(y: number, size: number = 1): number {
+  return oy(y) + CELL_SIZE * size / 2;
 }
-
-// TODO add cx and cy
 
 export default class LevelBuilder {
 
@@ -148,8 +151,8 @@ export default class LevelBuilder {
       new Turret(
         this.scene,
         this.player,
-        cx(turret.x),
-        cy(turret.y),
+        cx(turret.x, TURRET_GRID_SIZE),
+        cy(turret.y, TURRET_GRID_SIZE),
         turret.startDelay,
       );
     }
@@ -159,10 +162,10 @@ export default class LevelBuilder {
     for (const blade of levels[level].blades) {
       this.blades.add(new Blade(
         this.scene,
-        cx(blade.x1),
-        cy(blade.y1),
-        cx(blade.x2),
-        cy(blade.y2),
+        cx(blade.x1, BLADE_GRID_SIZE),
+        cy(blade.y1, BLADE_GRID_SIZE),
+        cx(blade.x2, BLADE_GRID_SIZE),
+        cy(blade.y2, BLADE_GRID_SIZE),
         blade.delay,
       ));
     }

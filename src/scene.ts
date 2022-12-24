@@ -1,8 +1,5 @@
 import * as Phaser from 'phaser';
 import bgBlankImage from '../assets/bg_blank.png';
-import doorClosedImage from '../assets/door_closed.png';
-import doorOpenImage from '../assets/door_open.png';
-import laserDoorImage from '../assets/laser_door.png';
 import Player from './game_objects/player';
 import Blade from './game_objects/blade';
 import KeyboardInput from './keyboard_input';
@@ -12,13 +9,10 @@ import Bullet from './game_objects/bullet';
 import BulletManager from './bullet_manager';
 import Platform from './game_objects/platform';
 import LevelBuilder from './levels/level_builder';
-import { SpikeDirection } from './enums';
+import Gate from './game_objects/gate';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const BG_BLANK_IMAGE = 'bg_blank_image';
-const DOOR_CLOSED_IMAGE = 'door_closed_image';
-const DOOR_OPEN_IMAGE = 'door_open_image';
-const LASER_DOOR_IMAGE = 'laser_door_image';
 
 export class PlatformerScene extends Phaser.Scene {
 
@@ -40,10 +34,8 @@ export class PlatformerScene extends Phaser.Scene {
     Turret.preload(this);
     Bullet.preload(this);
     Platform.preload(this);
+    Gate.preload(this);
     this.load.image(BG_BLANK_IMAGE, bgBlankImage);
-    this.load.image(DOOR_CLOSED_IMAGE, doorClosedImage);
-    this.load.image(DOOR_OPEN_IMAGE, doorOpenImage);
-    this.load.spritesheet(LASER_DOOR_IMAGE, laserDoorImage, { frameWidth: 32, frameHeight: 32 });
   }
 
   create(): void {
@@ -92,7 +84,7 @@ export class PlatformerScene extends Phaser.Scene {
 
     // const doorClosed = this.add.sprite(1000, 400, DOOR_CLOSED_IMAGE).setScale(0.1);
     // const doorOpen = this.add.sprite(800, 400, DOOR_OPEN_IMAGE).setScale(0.1);
-
+    new Gate(this, 1000, 400);
   }
 
   update(): void {

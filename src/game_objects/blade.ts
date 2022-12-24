@@ -8,8 +8,10 @@ import { CELL_SIZE } from '../consts';
 const BLADE_IMAGE = 'blade_image';
 const BLADE_COLUMN_IMAGE = 'blade_column_image';
 
+export const BLADE_GRID_SIZE = 2;
+
 const IMAGE_SIZE = 512; // Hardcoded (image size)
-const SIZE = 2 * CELL_SIZE;
+const SIZE = BLADE_GRID_SIZE * CELL_SIZE;
 const BLADE_SCALE = SIZE / IMAGE_SIZE;
 const BLADE_COLUMN_WIDTH = 16;
 const BLADE_LOOP_DURATION = 2000;

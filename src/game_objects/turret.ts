@@ -1,15 +1,16 @@
 import * as Phaser from 'phaser';
 import turretImage from '../../assets/turret.png';
 import { CELL_SIZE } from '../consts';
-import { PlatformerScene } from '../scene';
 import { angleBetween } from '../util';
 import Bullet from './bullet';
 import Player from './player';
 
 const TURRET_IMAGE = 'turret_image';
 
+export const TURRET_GRID_SIZE = 2;
+
 const IMAGE_SIZE = 256; // Hardcoded (image size)
-const SIZE = 2 * CELL_SIZE;
+const SIZE = TURRET_GRID_SIZE * CELL_SIZE;
 const SCALE = SIZE / IMAGE_SIZE;
 const ORIGIN_X = 0.64;
 const BULLET_FIRE_DELAY = 3000;
