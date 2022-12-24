@@ -5,20 +5,13 @@ import doorOpenImage from '../assets/door_open.png';
 import laserDoorImage from '../assets/laser_door.png';
 import Player from './game_objects/player';
 import Blade from './game_objects/blade';
-import levels from './levels';
 import KeyboardInput from './keyboard_input';
 import Spike from './game_objects/spike';
 import Turret from './game_objects/turret';
 import Bullet from './game_objects/bullet';
 import BulletManager from './bullet_manager';
 import Platform from './game_objects/platform';
-import { CELL_SIZE } from './consts';
-
-const LEVEL_X = 200;
-const LEVEL_Y = 100;
-
-const X_ORIGIN = LEVEL_X + CELL_SIZE;
-const Y_ORIGIN = LEVEL_Y + CELL_SIZE;
+import LevelBuilder from './levels/level_builder';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const BG_BLANK_IMAGE = 'bg_blank_image';
@@ -26,16 +19,14 @@ const DOOR_CLOSED_IMAGE = 'door_closed_image';
 const DOOR_OPEN_IMAGE = 'door_open_image';
 const LASER_DOOR_IMAGE = 'laser_door_image';
 
-const LEVEL_WIDTH = 40;
-const LEVEL_HEIGHT = 20;
-
 export class PlatformerScene extends Phaser.Scene {
 
   private player: Player;
   private blades: Blade[];    // TODO use a group for this
-  private platforms: Phaser.Physics.Arcade.StaticGroup;
+
 
   private bulletManager: BulletManager;
+  private levelBuilder: LevelBuilder;
 
   private keys: KeyboardInput;
 
@@ -65,47 +56,12 @@ export class PlatformerScene extends Phaser.Scene {
     // );
     this.player = new Player(this);
 
-    this.platforms = this.physics.add.staticGroup();
-    this.platforms.add(new Platform(
-      this,
-      LEVEL_X,
-      LEVEL_Y,
-      LEVEL_WIDTH,
-      false,
-    ));
-    this.platforms.add(new Platform(
-      this,
-      LEVEL_X,
-      LEVEL_Y + (LEVEL_HEIGHT - 1) * CELL_SIZE,
-      LEVEL_WIDTH,
-      false,
-    ));
-    this.platforms.add(new Platform(
-      this,
-      LEVEL_X,
-      LEVEL_Y,
-      LEVEL_HEIGHT,
-      true,
-    ));
-    this.platforms.add(new Platform(
-      this,
-      LEVEL_X + (LEVEL_WIDTH - 1) * CELL_SIZE,
-      LEVEL_Y,
-      LEVEL_HEIGHT,
-      true,
-    ));
+    this.levelBuilder = LevelBuilder.create(this);
 
-    for (const platform of levels.levels[0].platforms) {
-      this.platforms.add(new Platform(
-        this,
-        X_ORIGIN + platform.x * CELL_SIZE,
-        Y_ORIGIN + platform.y * CELL_SIZE,
-        platform.length,
-        platform.isVertical,
-      ));
-    }
+    this.levelBuilder.buildLevel(0);
 
-    this.physics.add.collider(this.player, this.platforms);
+
+    this.physics.add.collider(this.player, this.levelBuilder.platforms);
 
     // Add spikes
     // const spike = new Spike(this, 600, 400);
@@ -144,7 +100,7 @@ export class PlatformerScene extends Phaser.Scene {
 
     this.physics.add.overlap(
       this.bulletManager.bullets,
-      this.platforms,
+      this.levelBuilder.platforms,
       (bullet: Bullet) => {
         bullet.destroy();
       },
