@@ -9,6 +9,7 @@ const TURRET_IMAGE = 'turret_image';
 
 const SCALE = 0.2;
 const ORIGIN_X = 0.64;
+const BULLET_FIRE_DELAY = 3000;
 
 export default class Turret extends Phaser.GameObjects.Sprite {
 
@@ -38,7 +39,7 @@ export default class Turret extends Phaser.GameObjects.Sprite {
 
     // Fire bullet every X seconds
     this.scene.time.addEvent({
-      delay: 3000,
+      delay: BULLET_FIRE_DELAY,
       callback: this.fireBullet,
       callbackScope: this,
       loop: true,

@@ -9,6 +9,7 @@ const BLADE_COLUMN_IMAGE = 'blade_column_image';
 
 const BLADE_COLUMN_WIDTH = 16;
 const BLADE_SCALE = 0.1;
+const BLADE_LOOP_DURATION = 2000;
 
 export default class Blade extends DynamicSprite {
 
@@ -49,7 +50,7 @@ export default class Blade extends DynamicSprite {
       x: x2,
       y: y2,
       ease: 'Sine.easeInOut',
-      duration: 2000,
+      duration: BLADE_LOOP_DURATION,
       yoyo: true,
       repeat: -1,
       delay,

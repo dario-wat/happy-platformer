@@ -22,6 +22,7 @@ export default class Bullet extends DynamicSprite {
     scene.physics.add.existing(this);
 
     this.body.setAllowGravity(false);
+    this.setCircle(this.width / 2);
     this.setVelocity(speed * Math.cos(angleInRad), speed * Math.sin(angleInRad));
 
     BulletManager.get().add(this);

@@ -15,3 +15,10 @@ export class StaticSprite
   public body: Phaser.Physics.Arcade.StaticBody;
 
 }
+
+export class StaticTileSprite
+  extends Phaser.GameObjects.TileSprite {
+
+  public body: Phaser.Physics.Arcade.StaticBody;
+
+}

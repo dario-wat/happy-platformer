@@ -5,7 +5,7 @@ const levels = {
     {
       level: 1,
       platforms: [
-        { x: 400, y: 568, count: 30, isVertical: false },
+        { x: 3, y: 3, length: 5, isVertical: false },
       ],
       spikes: [
         { x: 400, y: 568 },

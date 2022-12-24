@@ -1,5 +1,5 @@
 - Character jumping (spritesheet already in assets)
 - Gates
 - JSON level creation
-- Turret shoots bullets
-- Spikes
+- Laser
+- Fix player motion

@@ -1,5 +1,4 @@
 import * as Phaser from 'phaser';
-import platformImage from '../assets/platform_blank.png';
 import bgBlankImage from '../assets/bg_blank.png';
 import doorClosedImage from '../assets/door_closed.png';
 import doorOpenImage from '../assets/door_open.png';
@@ -12,15 +11,23 @@ import Spike from './game_objects/spike';
 import Turret from './game_objects/turret';
 import Bullet from './game_objects/bullet';
 import BulletManager from './bullet_manager';
+import Platform from './game_objects/platform';
+import { CELL_SIZE } from './consts';
+
+const LEVEL_X = 200;
+const LEVEL_Y = 100;
+
+const X_ORIGIN = LEVEL_X + CELL_SIZE;
+const Y_ORIGIN = LEVEL_Y + CELL_SIZE;
 
 const PLATFORMER_SCENE = 'platformer_scene';
-const PLATFORM_IMAGE = 'platform_image';
 const BG_BLANK_IMAGE = 'bg_blank_image';
-
 const DOOR_CLOSED_IMAGE = 'door_closed_image';
 const DOOR_OPEN_IMAGE = 'door_open_image';
 const LASER_DOOR_IMAGE = 'laser_door_image';
 
+const LEVEL_WIDTH = 40;
+const LEVEL_HEIGHT = 20;
 
 export class PlatformerScene extends Phaser.Scene {
 
@@ -42,12 +49,11 @@ export class PlatformerScene extends Phaser.Scene {
     Spike.preload(this);
     Turret.preload(this);
     Bullet.preload(this);
-    this.load.image(PLATFORM_IMAGE, platformImage);
+    Platform.preload(this);
     this.load.image(BG_BLANK_IMAGE, bgBlankImage);
     this.load.image(DOOR_CLOSED_IMAGE, doorClosedImage);
     this.load.image(DOOR_OPEN_IMAGE, doorOpenImage);
     this.load.spritesheet(LASER_DOOR_IMAGE, laserDoorImage, { frameWidth: 32, frameHeight: 32 });
-
   }
 
   create(): void {
@@ -59,33 +65,59 @@ export class PlatformerScene extends Phaser.Scene {
     // );
     this.player = new Player(this);
 
-    // TODO when to use groups?
-    // this.physics.add.group
-
     this.platforms = this.physics.add.staticGroup();
+    this.platforms.add(new Platform(
+      this,
+      LEVEL_X,
+      LEVEL_Y,
+      LEVEL_WIDTH,
+      false,
+    ));
+    this.platforms.add(new Platform(
+      this,
+      LEVEL_X,
+      LEVEL_Y + (LEVEL_HEIGHT - 1) * CELL_SIZE,
+      LEVEL_WIDTH,
+      false,
+    ));
+    this.platforms.add(new Platform(
+      this,
+      LEVEL_X,
+      LEVEL_Y,
+      LEVEL_HEIGHT,
+      true,
+    ));
+    this.platforms.add(new Platform(
+      this,
+      LEVEL_X + (LEVEL_WIDTH - 1) * CELL_SIZE,
+      LEVEL_Y,
+      LEVEL_HEIGHT,
+      true,
+    ));
 
     for (const platform of levels.levels[0].platforms) {
-      for (let i = 0; i < platform.count; i++) {
-        const bs = this.platforms.create(
-          platform.x + (platform.isVertical ? 0 : i * 32),
-          platform.y + (platform.isVertical ? i * 32 : 0),
-          PLATFORM_IMAGE,
-        ).setScale(1 / 16).refreshBody();
-      }
+      this.platforms.add(new Platform(
+        this,
+        X_ORIGIN + platform.x * CELL_SIZE,
+        Y_ORIGIN + platform.y * CELL_SIZE,
+        platform.length,
+        platform.isVertical,
+      ));
     }
+
     this.physics.add.collider(this.player, this.platforms);
 
     // Add spikes
-    const spike = new Spike(this, 600, 400);
-    this.physics.add.overlap(
-      this.player,
-      spike,
-      () => { this.player.respawn() },
-    )
+    // const spike = new Spike(this, 600, 400);
+    // this.physics.add.overlap(
+    //   this.player,
+    //   spike,
+    //   () => { this.player.respawn() },
+    // )
 
     this.blades = [
-      new Blade(this, 600, 300, 400, 200, 500),
-      new Blade(this, 800, 450, 1000, 450),
+      // new Blade(this, 600, 300, 400, 200, 500),
+      // new Blade(this, 800, 450, 1000, 450),
     ];
 
     // Respawn the user when they touch the blade
@@ -97,8 +129,9 @@ export class PlatformerScene extends Phaser.Scene {
 
     this.bulletManager = BulletManager.create(this);
 
-    const turret = new Turret(this, this.player, 700, 200,);
-    new Turret(this, this.player, 900, 200, 1000);
+    // for (let i = 0; i < 10; i++) {
+    //   new Turret(this, this.player, 100 + i * 100, 200, 100 + i * 200);
+    // }
 
     this.physics.add.overlap(
       this.player,
@@ -107,12 +140,20 @@ export class PlatformerScene extends Phaser.Scene {
         player.respawn();
         bullet.destroy();
       },
-    )
+    );
+
+    this.physics.add.overlap(
+      this.bulletManager.bullets,
+      this.platforms,
+      (bullet: Bullet) => {
+        bullet.destroy();
+      },
+    );
 
 
 
-    const doorClosed = this.add.sprite(1000, 400, DOOR_CLOSED_IMAGE).setScale(0.1);
-    const doorOpen = this.add.sprite(800, 400, DOOR_OPEN_IMAGE).setScale(0.1);
+    // const doorClosed = this.add.sprite(1000, 400, DOOR_CLOSED_IMAGE).setScale(0.1);
+    // const doorOpen = this.add.sprite(800, 400, DOOR_OPEN_IMAGE).setScale(0.1);
 
   }
 
