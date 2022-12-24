@@ -14,9 +14,11 @@ const levels = [
   {
     level: 0,
     startGate: { x: 3, y: 0 },
-    endGate: { x: 33, y: 3 },
+    endGate: { x: 15, y: 0 },
     platforms: [
-      { x: 3, y: 3, length: 5, isVertical: false },
+      { x: 3, y: 3, length: 30, isVertical: false },
+      { x: 33, y: 7, length: 3, isVertical: false },
+      { x: 32, y: 4, length: 3, isVertical: true },
     ],
     spikes: [
       { x: 9, y: 19, direction: SpikeDirection.UP },
@@ -24,7 +26,7 @@ const levels = [
       { x: 11, y: 19, direction: SpikeDirection.UP },
     ],
     turrets: [
-      { x: 10, y: 4, startDelay: 0 },
+      { x: 10, y: 5, startDelay: 0 },
     ],
     blades: [
       { x1: 14, y1: 4, x2: 16, y2: 8, delay: 0 },
