@@ -1,5 +1,7 @@
 import * as Phaser from 'phaser';
 
+export const emptyDefaults = {} as Phaser.Types.Physics.Arcade.PhysicsGroupDefaults;
+
 export const distanceBetween = Phaser.Math.Distance.Between;
 export const angleBetween = Phaser.Math.Angle.Between;
 

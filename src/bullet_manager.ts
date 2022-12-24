@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import Bullet from './game_objects/bullet';
+import { emptyDefaults } from './util';
 
 export default class BulletManager {
 
@@ -12,7 +13,7 @@ export default class BulletManager {
       classType: Bullet,
       runChildUpdate: true,
     });
-    this.bullets.defaults = {} as Phaser.Types.Physics.Arcade.PhysicsGroupDefaults;
+    this.bullets.defaults = emptyDefaults;
   }
 
   static create(scene: Phaser.Scene): BulletManager {

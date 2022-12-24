@@ -3,7 +3,10 @@ import levels from '../levels/levels';
 import { CELL_SIZE } from '../consts';
 import Platform from '../game_objects/platform';
 import Spike from '../game_objects/spike';
-import { debugLine, debugPoint } from '../util';
+import { debugLine, debugPoint, emptyDefaults } from '../util';
+import Turret from '../game_objects/turret';
+import Player from '../game_objects/player';
+import Blade from '../game_objects/blade';
 
 const LEVEL_X = 200;
 const LEVEL_Y = 100;
@@ -45,15 +48,24 @@ export default class LevelBuilder {
 
   public platforms: Phaser.Physics.Arcade.StaticGroup;
   public spikes: Phaser.Physics.Arcade.StaticGroup;
+  public blades: Phaser.Physics.Arcade.Group
 
-  private constructor(private scene: Phaser.Scene) {
+  private constructor(
+    private scene: Phaser.Scene,
+    private player: Player,
+  ) {
     this.platforms = scene.physics.add.staticGroup();
     this.spikes = scene.physics.add.staticGroup();
+    this.blades = scene.physics.add.group({
+      classType: Blade,
+      runChildUpdate: true,
+    });
+    this.blades.defaults = emptyDefaults;
   }
 
-  static create(scene: Phaser.Scene): LevelBuilder {
+  static create(scene: Phaser.Scene, player: Player): LevelBuilder {
     if (!LevelBuilder.instance) {
-      LevelBuilder.instance = new LevelBuilder(scene);
+      LevelBuilder.instance = new LevelBuilder(scene, player);
     }
     return LevelBuilder.instance;
   }
@@ -69,6 +81,8 @@ export default class LevelBuilder {
     this.buildBoundingPlatforms();
     this.buildPlatforms(level);
     this.buildSpikes(level);
+    this.buildTurrets(level);
+    this.buildBlades(level);
   }
 
   private buildBoundingPlatforms(): void {
@@ -121,6 +135,31 @@ export default class LevelBuilder {
         cx(spike.x),
         cy(spike.y),
         spike.direction,
+      ));
+    }
+  }
+
+  private buildTurrets(level: number): void {
+    for (const turret of levels[level].turrets) {
+      new Turret(
+        this.scene,
+        this.player,
+        cx(turret.x),
+        cy(turret.y),
+        turret.startDelay,
+      );
+    }
+  }
+
+  private buildBlades(level: number): void {
+    for (const blade of levels[level].blades) {
+      this.blades.add(new Blade(
+        this.scene,
+        cx(blade.x1),
+        cy(blade.y1),
+        cx(blade.x2),
+        cy(blade.y2),
+        blade.delay,
       ));
     }
   }

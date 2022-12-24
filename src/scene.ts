@@ -23,8 +23,6 @@ const LASER_DOOR_IMAGE = 'laser_door_image';
 export class PlatformerScene extends Phaser.Scene {
 
   private player: Player;
-  private blades: Blade[];    // TODO use a group for this
-
 
   private bulletManager: BulletManager;
   private levelBuilder: LevelBuilder;
@@ -57,7 +55,7 @@ export class PlatformerScene extends Phaser.Scene {
     // );
     this.player = new Player(this);
 
-    this.levelBuilder = LevelBuilder.create(this);
+    this.levelBuilder = LevelBuilder.create(this, this.player);
 
     this.levelBuilder.buildLevel(0);
     // new Spike(this, 600, 400, SpikeDirection.DOWN);
@@ -73,10 +71,6 @@ export class PlatformerScene extends Phaser.Scene {
     //   () => { this.player.respawn() },
     // )
 
-    this.blades = [
-      // new Blade(this, 600, 300, 400, 200, 500),
-      // new Blade(this, 800, 450, 1000, 450),
-    ];
 
 
 
@@ -94,7 +88,7 @@ export class PlatformerScene extends Phaser.Scene {
 
     this.physics.add.overlap(
       this.player,
-      this.blades,
+      this.levelBuilder.blades,
       (player: Player) => player.respawn(),
     );
 

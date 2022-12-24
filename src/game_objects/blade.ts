@@ -3,12 +3,15 @@ import bladeImage from '../../assets/blade.png';
 import bladeColumnImage from '../../assets/blade_column.png';
 import { DynamicSprite } from './sprite';
 import { angleBetween, distanceBetween } from '../util';
+import { CELL_SIZE } from '../consts';
 
 const BLADE_IMAGE = 'blade_image';
 const BLADE_COLUMN_IMAGE = 'blade_column_image';
 
+const IMAGE_SIZE = 512; // Hardcoded (image size)
+const SIZE = 2 * CELL_SIZE;
+const BLADE_SCALE = SIZE / IMAGE_SIZE;
 const BLADE_COLUMN_WIDTH = 16;
-const BLADE_SCALE = 0.1;
 const BLADE_LOOP_DURATION = 2000;
 
 export default class Blade extends DynamicSprite {
