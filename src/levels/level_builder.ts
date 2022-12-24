@@ -7,6 +7,7 @@ import { debugLine, debugPoint, emptyDefaults } from '../util';
 import Turret, { TURRET_GRID_SIZE } from '../game_objects/turret';
 import Player from '../game_objects/player';
 import Blade, { BLADE_GRID_SIZE } from '../game_objects/blade';
+import Gate, { GATE_GRID_SIZE } from '../game_objects/gate';
 
 const LEVEL_X = 200;
 const LEVEL_Y = 100;
@@ -52,6 +53,8 @@ export default class LevelBuilder {
   public platforms: Phaser.Physics.Arcade.StaticGroup;
   public spikes: Phaser.Physics.Arcade.StaticGroup;
   public blades: Phaser.Physics.Arcade.Group
+  public startGate: Gate;
+  public endGate: Gate;
 
   private constructor(
     private scene: Phaser.Scene,
@@ -86,6 +89,7 @@ export default class LevelBuilder {
     this.buildSpikes(level);
     this.buildTurrets(level);
     this.buildBlades(level);
+    this.buildGates(level);
 
     if (DEBUG_GRID) {
       this.debugGrid();
@@ -169,6 +173,21 @@ export default class LevelBuilder {
         blade.delay,
       ));
     }
+  }
+
+  private buildGates(level: number): void {
+    this.startGate = new Gate(
+      this.scene,
+      cx(levels[level].startGate.x, GATE_GRID_SIZE),
+      cy(levels[level].startGate.y, GATE_GRID_SIZE),
+      true,
+    );
+    this.endGate = new Gate(
+      this.scene,
+      cx(levels[level].endGate.x, GATE_GRID_SIZE),
+      cy(levels[level].endGate.y, GATE_GRID_SIZE),
+      false,
+    );
   }
 
   private debugGrid(): void {

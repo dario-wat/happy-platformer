@@ -8,7 +8,7 @@ const DOOR_OPEN_IMAGE = 'door_open_image';
 const DOOR_CLOSED_IMAGE = 'door_closed_image';
 const LASER_DOOR_IMAGE = 'laser_door_image';
 
-export const GATE_GRID_SIZE = 2;
+export const GATE_GRID_SIZE = 3;
 
 const IMAGE_SIZE = 512;
 const SIZE = GATE_GRID_SIZE * CELL_SIZE;
@@ -20,8 +20,9 @@ export default class Gate extends StaticSprite {
     scene: Phaser.Scene,
     x: number,
     y: number,
+    isOpen: boolean,
   ) {
-    super(scene, x, y, DOOR_CLOSED_IMAGE);
+    super(scene, x, y, isOpen ? DOOR_OPEN_IMAGE : DOOR_CLOSED_IMAGE);
     scene.add.existing(this);
 
     this.setScale(SCALE);

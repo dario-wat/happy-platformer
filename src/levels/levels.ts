@@ -12,7 +12,9 @@ import { SpikeDirection } from '../enums';
 
 const levels = [
   {
-    level: 1,
+    level: 0,
+    startGate: { x: 3, y: 0 },
+    endGate: { x: 33, y: 3 },
     platforms: [
       { x: 3, y: 3, length: 5, isVertical: false },
     ],

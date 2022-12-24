@@ -48,13 +48,15 @@ export class PlatformerScene extends Phaser.Scene {
     this.levelBuilder = LevelBuilder.create(this, this.player);
     this.levelBuilder.buildLevel(0);
 
+    this.player.respawnAtGate(this.levelBuilder.startGate);
+
     this.physics.add.collider(this.player, this.levelBuilder.platforms);
 
     this.physics.add.overlap(
       this.player,
       this.bulletManager.bullets,
       (player: Player, bullet: Bullet) => {
-        player.respawn();
+        player.respawnAtGate(this.levelBuilder.startGate);
         bullet.destroy();
       },
     );
@@ -62,13 +64,13 @@ export class PlatformerScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.levelBuilder.blades,
-      (player: Player) => player.respawn(),
+      (player: Player) => player.respawnAtGate(this.levelBuilder.startGate),
     );
 
     this.physics.add.overlap(
       this.player,
       this.levelBuilder.spikes,
-      (player: Player) => player.respawn(),
+      (player: Player) => player.respawnAtGate(this.levelBuilder.startGate),
     );
 
     this.physics.add.overlap(
@@ -81,10 +83,6 @@ export class PlatformerScene extends Phaser.Scene {
     //   this.cameras.main.width,
     //   this.cameras.main.height,
     // );
-
-    // const doorClosed = this.add.sprite(1000, 400, DOOR_CLOSED_IMAGE).setScale(0.1);
-    // const doorOpen = this.add.sprite(800, 400, DOOR_OPEN_IMAGE).setScale(0.1);
-    new Gate(this, 1000, 400);
   }
 
   update(): void {

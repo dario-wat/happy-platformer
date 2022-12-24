@@ -3,6 +3,7 @@ import characterRunImage from '../../assets/character_run.png';
 import characterIdleImage from '../../assets/character_idle.png';
 import characterJumpImage from '../../assets/character_jump.png';
 import { DynamicSprite } from './sprite';
+import Gate from './gate';
 
 const CHARACTER_RUN_SS = 'character_run_ss';
 const CHARACTER_IDLE_SS = 'character_idle_ss';
@@ -139,8 +140,13 @@ export default class Player extends DynamicSprite {
   }
 
   respawn(x: number = SPAWN_X, y: number = SPAWN_Y): void {
-    this.setPosition(x, y);
     this.setVelocity(0);
     this.setAcceleration(0);
+    this.setPosition(x, y);
+  }
+
+  respawnAtGate(gate: Gate): void {
+    const spawnThreshold = 10;
+    this.respawn(gate.x, gate.y - spawnThreshold);
   }
 }
