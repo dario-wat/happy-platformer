@@ -37,6 +37,7 @@ export default class Player extends DynamicSprite {
     this.setSize(32, 48);    // Measured manually
     this.setOffset(48, 16);  // Offset x = (frame width - size X) / 2
 
+    this.setDepth(1);
     this.setMaxVelocity(MAX_VELOCITY, JUMP_VELOCITY);
     this.setCollideWorldBounds(true);
 
@@ -62,7 +63,6 @@ export default class Player extends DynamicSprite {
       repeat: -1
     });
 
-    // TODO, this is not quite right
     // Jump animation
     scene.anims.create({
       key: CHARACTER_JUMP_AN,
@@ -70,8 +70,8 @@ export default class Player extends DynamicSprite {
         CHARACTER_JUMP_SS,
         { start: 0, end: 3 }
       ),
-      frameRate: 1200,
-      repeat: 1,
+      frameRate: 10,
+      repeat: 0,
     });
   }
 

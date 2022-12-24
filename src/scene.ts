@@ -97,8 +97,8 @@ export class PlatformerScene extends Phaser.Scene {
     } else if (this.keys.a.isDown) {
       this.player.runLeft();
     } else if (this.keys.w.isDown) {
-      this.player.jump();
       this.player.idle();
+      this.player.jump();
     } else {
       this.player.idle();
     }

@@ -1,5 +1,4 @@
-- Character jumping (spritesheet already in assets)
-- Gates
+- Gates - functionality
 - JSON level creation
 - Laser
 - Fix player motion

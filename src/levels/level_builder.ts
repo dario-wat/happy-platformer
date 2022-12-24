@@ -181,12 +181,14 @@ export default class LevelBuilder {
       this.player,
       cx(levels[level].startGate.x, GATE_GRID_SIZE),
       cy(levels[level].startGate.y, GATE_GRID_SIZE),
+      true,
     );
     this.endGate = new Gate(
       this.scene,
       this.player,
       cx(levels[level].endGate.x, GATE_GRID_SIZE),
       cy(levels[level].endGate.y, GATE_GRID_SIZE),
+      false,
     );
   }
 
