@@ -12,6 +12,7 @@ import Bullet from './game_objects/bullet';
 import BulletManager from './bullet_manager';
 import Platform from './game_objects/platform';
 import LevelBuilder from './levels/level_builder';
+import { SpikeDirection } from './enums';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const BG_BLANK_IMAGE = 'bg_blank_image';
@@ -59,6 +60,7 @@ export class PlatformerScene extends Phaser.Scene {
     this.levelBuilder = LevelBuilder.create(this);
 
     this.levelBuilder.buildLevel(0);
+    // new Spike(this, 600, 400, SpikeDirection.DOWN);
 
 
     this.physics.add.collider(this.player, this.levelBuilder.platforms);
@@ -76,18 +78,10 @@ export class PlatformerScene extends Phaser.Scene {
       // new Blade(this, 800, 450, 1000, 450),
     ];
 
-    // Respawn the user when they touch the blade
-    this.physics.add.overlap(
-      this.player,
-      this.blades,
-      () => this.player.respawn(),
-    );
+
 
     this.bulletManager = BulletManager.create(this);
 
-    // for (let i = 0; i < 10; i++) {
-    //   new Turret(this, this.player, 100 + i * 100, 200, 100 + i * 200);
-    // }
 
     this.physics.add.overlap(
       this.player,
@@ -99,11 +93,21 @@ export class PlatformerScene extends Phaser.Scene {
     );
 
     this.physics.add.overlap(
+      this.player,
+      this.blades,
+      (player: Player) => player.respawn(),
+    );
+
+    this.physics.add.overlap(
+      this.player,
+      this.levelBuilder.spikes,
+      (player: Player) => player.respawn(),
+    );
+
+    this.physics.add.overlap(
       this.bulletManager.bullets,
       this.levelBuilder.platforms,
-      (bullet: Bullet) => {
-        bullet.destroy();
-      },
+      (bullet: Bullet) => bullet.destroy(),
     );
 
 
