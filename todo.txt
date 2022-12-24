@@ -3,3 +3,4 @@
 - JSON level creation
 - Laser
 - Fix player motion
+- Make spikes triangular

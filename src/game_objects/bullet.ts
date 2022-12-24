@@ -7,6 +7,7 @@ const BULLET_IMAGE = 'bullet_image';
 const BULLET_ANIMATION = 'bullet_animation';
 
 const SPEED = 200;
+const SIZE = 12;
 
 export default class Bullet extends DynamicSprite {
 
@@ -22,6 +23,7 @@ export default class Bullet extends DynamicSprite {
     scene.physics.add.existing(this);
 
     this.body.setAllowGravity(false);
+    this.setDisplaySize(SIZE, SIZE);
     this.setCircle(this.width / 2);
     this.setVelocity(speed * Math.cos(angleInRad), speed * Math.sin(angleInRad));
 

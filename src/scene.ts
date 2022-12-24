@@ -49,33 +49,14 @@ export class PlatformerScene extends Phaser.Scene {
   create(): void {
     this.keys = new KeyboardInput(this);
 
-    // this.add.image(0, 0, BG_BLANK_IMAGE).setOrigin(0, 0).setDisplaySize(
-    //   this.cameras.main.width,
-    //   this.cameras.main.height,
-    // );
     this.player = new Player(this);
-
-    this.levelBuilder = LevelBuilder.create(this, this.player);
-
-    this.levelBuilder.buildLevel(0);
-    // new Spike(this, 600, 400, SpikeDirection.DOWN);
-
-
-    this.physics.add.collider(this.player, this.levelBuilder.platforms);
-
-    // Add spikes
-    // const spike = new Spike(this, 600, 400);
-    // this.physics.add.overlap(
-    //   this.player,
-    //   spike,
-    //   () => { this.player.respawn() },
-    // )
-
-
-
 
     this.bulletManager = BulletManager.create(this);
 
+    this.levelBuilder = LevelBuilder.create(this, this.player);
+    this.levelBuilder.buildLevel(0);
+
+    this.physics.add.collider(this.player, this.levelBuilder.platforms);
 
     this.physics.add.overlap(
       this.player,
@@ -104,7 +85,10 @@ export class PlatformerScene extends Phaser.Scene {
       (bullet: Bullet) => bullet.destroy(),
     );
 
-
+    // this.add.image(0, 0, BG_BLANK_IMAGE).setOrigin(0, 0).setDisplaySize(
+    //   this.cameras.main.width,
+    //   this.cameras.main.height,
+    // );
 
     // const doorClosed = this.add.sprite(1000, 400, DOOR_CLOSED_IMAGE).setScale(0.1);
     // const doorOpen = this.add.sprite(800, 400, DOOR_OPEN_IMAGE).setScale(0.1);
@@ -112,8 +96,6 @@ export class PlatformerScene extends Phaser.Scene {
   }
 
   update(): void {
-
-    // TODO these inputs need to be handled better
     if (this.keys.d.isDown && this.keys.w.isDown) {
       this.player.runRight();
       this.player.jump();

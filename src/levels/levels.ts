@@ -1,4 +1,4 @@
-import { SpikeDirection } from "../enums";
+import { SpikeDirection } from '../enums';
 
 /*
   Sizing in grid terms:

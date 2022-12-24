@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
 import levels from '../levels/levels';
-import { CELL_SIZE } from '../consts';
+import { CELL_SIZE, DEBUG_GRID } from '../consts';
 import Platform from '../game_objects/platform';
 import Spike from '../game_objects/spike';
 import { debugLine, debugPoint, emptyDefaults } from '../util';
@@ -83,6 +83,10 @@ export default class LevelBuilder {
     this.buildSpikes(level);
     this.buildTurrets(level);
     this.buildBlades(level);
+
+    if (DEBUG_GRID) {
+      this.debugGrid();
+    }
   }
 
   private buildBoundingPlatforms(): void {
