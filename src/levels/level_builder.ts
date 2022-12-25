@@ -208,14 +208,13 @@ export default class LevelBuilder {
   }
 
   private drawLevel(level: number): void {
-    const levelData = levels[level];
-    // Draw level number into the scene
+    const levelYOffset = 50;
     this.scene.add.text(
-      ox(LEVEL_WIDTH / 2),
-      oy(LEVEL_HEIGHT / 2),
-      level.toString(),
-      { color: '#ff0000', font: '48px Arial' },
-    ).setOrigin(0.5, 0.5);
+      X_ORIGIN,
+      Y_ORIGIN - levelYOffset,
+      'Level ' + level.toString(),
+      { color: '#bababa', font: '24px Arial' },
+    );
   };
 
   private debugGrid(): void {

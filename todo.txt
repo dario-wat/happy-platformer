@@ -1,4 +1,5 @@
-- Laser
+- Laser collision
 - Fix player motion
-- Make spikes triangular
+- Make spikes triangular (or rather change the player body)
 - Background
+- Make levels

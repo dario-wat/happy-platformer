@@ -15,14 +15,12 @@ const ORIGIN_X = 0.64;
 
 export default class LaserTurret extends Phaser.GameObjects.Sprite {
 
-  private laser: Laser | null = null;
-
   constructor(
     public scene: PlatformerScene,
     x: number,
     y: number,
     angle: number,
-    startDelay: number = 0, // TODO
+    startDelay: number = 0,
   ) {
     super(scene, x, y, LASER_TURRET_IMAGE);
     scene.add.existing(this);
@@ -32,48 +30,18 @@ export default class LaserTurret extends Phaser.GameObjects.Sprite {
 
     this.setAngle(angle);
 
-    // File laser every 5 seconds for 2 seconds
-    // scene.time.addEvent({
-    //   delay: 3000,
-    //   callback: () => {
-    //     this.fireLaser();
-    //     scene.time.addEvent({
-    //       delay: 2000,
-    //       callback: () => {
-    //         this.destroyLaser();
-    //       },
-    //       callbackScope: this,
-    //       loop: false,
-    //     });
-    //   },
-    //   callbackScope: this,
-    //   loop: true,
-    //   startAt: startDelay,
-    // });
-
-    this.fireLaser();
-  }
-
-  static preload(scene: Phaser.Scene): void {
-    scene.load.image(LASER_TURRET_IMAGE, laserTurretImage);
-  }
-
-  private fireLaser(): void {
     const rotation = this.rotation + Math.PI;
     const width = this.width * SCALE * ORIGIN_X;
-    console.log(width);
-    this.laser = new Laser(
+    new Laser(
       this.scene,
       this.x + width * Math.cos(rotation),
       this.y + width * Math.sin(rotation),
       rotation,
+      startDelay,
     );
   }
 
-  private destroyLaser(): void {
-    if (this.laser) {
-      this.laser.destroy();
-      this.laser = null;
-    }
+  static preload(scene: Phaser.Scene): void {
+    scene.load.image(LASER_TURRET_IMAGE, laserTurretImage);
   }
 }

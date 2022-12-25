@@ -13,7 +13,9 @@ const IMAGE_SIZE = 256; // Hardcoded (image size)
 const SIZE = TURRET_GRID_SIZE * CELL_SIZE;
 const SCALE = SIZE / IMAGE_SIZE;
 const ORIGIN_X = 0.64;
+
 const BULLET_FIRE_DELAY = 3000;
+const DELAY_THRESHOLD = 100;  // Need this to avoid firing bullet on first frame
 
 export default class Turret extends Phaser.GameObjects.Sprite {
 
@@ -46,7 +48,7 @@ export default class Turret extends Phaser.GameObjects.Sprite {
       callback: this.fireBullet,
       callbackScope: this,
       loop: true,
-      startAt: startDelay,
+      startAt: BULLET_FIRE_DELAY - startDelay - DELAY_THRESHOLD,
     });
   }
 

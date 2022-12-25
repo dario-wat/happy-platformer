@@ -29,6 +29,8 @@ const levels = [
     ],
     lasers: [
       { x: 20, y: 5, angle: -45, startDelay: 0 },
+      { x: 24, y: 5, angle: -45, startDelay: 500 },
+      { x: 28, y: 5, angle: -45, startDelay: 1000 },
     ],
   },
   {
