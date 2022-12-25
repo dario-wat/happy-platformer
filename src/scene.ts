@@ -6,7 +6,7 @@ import KeyboardInput from './keyboard_input';
 import Spike from './game_objects/spike';
 import Turret from './game_objects/turret';
 import Bullet from './game_objects/bullet';
-import BulletManager from './bullet_manager';
+import BulletManager from './managers/bullet_manager';
 import Platform from './game_objects/platform';
 import LevelBuilder from './levels/level_builder';
 import Gate from './game_objects/gate';
@@ -14,6 +14,7 @@ import levels from './levels/levels';
 import { distanceBetween } from './util';
 import LaserTurret from './game_objects/laser_turret';
 import Laser from './game_objects/laser';
+import LaserManager from './managers/laser_manager';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const BG_BLANK_IMAGE = 'bg_blank_image';
@@ -23,6 +24,7 @@ export class PlatformerScene extends Phaser.Scene {
   public player: Player;
 
   public bulletManager: BulletManager;
+  public laserManager: LaserManager;
   private levelBuilder: LevelBuilder;
 
   private keys: KeyboardInput;
@@ -50,6 +52,7 @@ export class PlatformerScene extends Phaser.Scene {
     this.player = new Player(this);
 
     this.bulletManager = new BulletManager(this);
+    this.laserManager = new LaserManager();
 
     const level = data.level || 0;
     this.levelBuilder = new LevelBuilder(this);
@@ -77,6 +80,12 @@ export class PlatformerScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.levelBuilder.spikes,
+      (player: Player) => player.respawnAtGate(this.levelBuilder.startGate),
+    );
+
+    this.physics.add.overlap(
+      this.player,
+      this.laserManager.fakeLasers,
       (player: Player) => player.respawnAtGate(this.levelBuilder.startGate),
     );
 

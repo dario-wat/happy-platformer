@@ -1,8 +1,6 @@
 import { PlatformerScene } from '../scene';
-import { DynamicSprite, StaticSprite } from './sprite';
+import { DynamicSprite } from './sprite';
 import laserImage from '../../assets/laser.png';
-import { debugPoint } from '../util';
-import Player from './player';
 import { DEBUG_LASER_PHYSICS } from '../consts';
 
 const LASER_IMAGE = 'laser_image';
@@ -48,32 +46,14 @@ export default class Laser extends DynamicSprite {
       (body: Phaser.Physics.Arcade.Sprite) => body.setCircle(circleSize),
     );
 
-    // Player respawns when bodies hits player
-    scene.physics.add.overlap(
-      this.fakeLaser,
-      scene.player,
-      () => {
-        scene.player.respawn();
-      }
-    );
-
     this.setScale(SCALE_WIDTH, SCALE_HEIGHT);
-
     this.setPosition(
       x + Math.cos(rotation) * length / 2,
       y + Math.sin(rotation) * length / 2,
     );
-
     this.setRotation(rotation);
 
-    // Check if laser intersects with player
-    scene.physics.add.overlap(
-      this,
-      scene.player,
-      (_laser: Laser, player: Player) => {
-        player.respawn();
-      }
-    );
+    scene.laserManager.add(this.fakeLaser);
   }
 
   static preload(scene: Phaser.Scene): void {

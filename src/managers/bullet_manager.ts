@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
-import Bullet from './game_objects/bullet';
-import { emptyDefaults } from './util';
+import Bullet from '../game_objects/bullet';
+import { emptyDefaults } from '../util';
 
 export default class BulletManager {
 

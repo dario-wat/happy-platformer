@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
 import bulletImage from '../../assets/bullet.png';
-import BulletManager from '../bullet_manager';
+import BulletManager from '../managers/bullet_manager';
 import { PlatformerScene } from '../scene';
 import { DynamicSprite } from './sprite';
 
