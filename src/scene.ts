@@ -12,6 +12,8 @@ import LevelBuilder from './levels/level_builder';
 import Gate from './game_objects/gate';
 import levels from './levels/levels';
 import { distanceBetween } from './util';
+import LaserTurret from './game_objects/laser_turret';
+import Laser from './game_objects/laser';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const BG_BLANK_IMAGE = 'bg_blank_image';
@@ -35,6 +37,8 @@ export class PlatformerScene extends Phaser.Scene {
     Spike.preload(this);
     Turret.preload(this);
     Bullet.preload(this);
+    LaserTurret.preload(this);
+    Laser.preload(this);
     Platform.preload(this);
     Gate.preload(this);
     this.load.image(BG_BLANK_IMAGE, bgBlankImage);
@@ -48,7 +52,7 @@ export class PlatformerScene extends Phaser.Scene {
     this.bulletManager = new BulletManager(this);
 
     const level = data.level || 0;
-    this.levelBuilder = new LevelBuilder(this, this.player);
+    this.levelBuilder = new LevelBuilder(this);
     this.levelBuilder.buildLevel(level);
 
     this.player.respawnAtGate(this.levelBuilder.startGate);

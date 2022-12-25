@@ -4,7 +4,6 @@ import { CELL_SIZE } from '../consts';
 import { PlatformerScene } from '../scene';
 import { angleBetween } from '../util';
 import Bullet from './bullet';
-import Player from './player';
 
 const TURRET_IMAGE = 'turret_image';
 

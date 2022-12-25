@@ -3,12 +3,12 @@ import levels from '../levels/levels';
 import { CELL_SIZE, DEBUG_GRID } from '../consts';
 import Platform from '../game_objects/platform';
 import Spike from '../game_objects/spike';
-import { debugLine, debugPoint, emptyDefaults } from '../util';
+import { debugLine, emptyDefaults } from '../util';
 import Turret, { TURRET_GRID_SIZE } from '../game_objects/turret';
-import Player from '../game_objects/player';
 import Blade, { BLADE_GRID_SIZE } from '../game_objects/blade';
 import Gate, { GATE_GRID_SIZE } from '../game_objects/gate';
 import { PlatformerScene } from '../scene';
+import LaserTurret from '../game_objects/laser_turret';
 
 const LEVEL_X = 200;
 const LEVEL_Y = 100;
@@ -57,7 +57,6 @@ export default class LevelBuilder {
 
   constructor(
     private scene: PlatformerScene,
-    private player: Player,
   ) {
     this.platforms = scene.physics.add.staticGroup();
     this.spikes = scene.physics.add.staticGroup();
@@ -73,6 +72,7 @@ export default class LevelBuilder {
     this.buildPlatforms(level);
     this.buildSpikes(level);
     this.buildTurrets(level);
+    this.buildLaserTurrets(level);
     this.buildBlades(level);
     this.buildGates(level);
     this.drawLevel(level);
@@ -154,6 +154,22 @@ export default class LevelBuilder {
         this.scene,
         cx(turret.x, TURRET_GRID_SIZE),
         cy(turret.y, TURRET_GRID_SIZE),
+        turret.startDelay,
+      );
+    }
+  }
+
+  private buildLaserTurrets(level: number): void {
+    if (!levels[level].lasers) {
+      return;
+    }
+
+    for (const turret of levels[level].lasers) {
+      new LaserTurret(
+        this.scene,
+        cx(turret.x, TURRET_GRID_SIZE),
+        cy(turret.y, TURRET_GRID_SIZE),
+        turret.angle,
         turret.startDelay,
       );
     }

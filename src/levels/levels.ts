@@ -28,7 +28,7 @@ const levels = [
       { x1: 20, y1: 17, x2: 26, y2: 17, delay: 0 },
     ],
     lasers: [
-      { x: 400, y: 500 }
+      { x: 20, y: 5, angle: -45, startDelay: 0 },
     ],
   },
   {
@@ -48,9 +48,6 @@ const levels = [
     blades: [
       { x1: 14, y1: 4, x2: 16, y2: 8, delay: 0 },
       { x1: 20, y1: 17, x2: 26, y2: 17, delay: 0 },
-    ],
-    lasers: [
-      { x: 400, y: 500 }
     ],
   },
 ];
