@@ -1,8 +1,6 @@
-- Laser collision
 - Fix player motion
-- Make spike body smaller
 - Background
-- Make levels
 - Dying feels unsatisfying
 - Smaller player body rectangle
 - Jumping variable height
+- SLight deleay after death, reopen gate?

@@ -25,7 +25,8 @@ export default class Bullet extends DynamicSprite {
 
     this.body.setAllowGravity(false);
     this.setDisplaySize(SIZE, SIZE);
-    this.setCircle(this.width / 2);
+    this.setCircle(this.width / 4);   // Make the bullet body smaller than the sprite
+    this.setOffset(this.width / 4, this.height / 4);
     this.setVelocity(speed * Math.cos(angleInRad), speed * Math.sin(angleInRad));
 
     scene.bulletManager.add(this);
