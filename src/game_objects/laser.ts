@@ -138,7 +138,7 @@ export default class Laser extends DynamicSprite {
 
   private enableFakeLaser(): void {
     this.fakeLaser.children.iterate((body: Phaser.Physics.Arcade.Sprite) =>
-      body.enableBody(true, body.x, body.y, true, true),
+      body.enableBody(true, body.x, body.y, true, false),
     );
   }
 

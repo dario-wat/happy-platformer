@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import levels from '../levels/levels';
+import levels, { LEVEL_HEIGHT, LEVEL_WIDTH } from '../levels/levels';
 import { CELL_SIZE, DEBUG_GRID } from '../consts';
 import Platform from '../game_objects/platform';
 import Spike from '../game_objects/spike';
@@ -8,7 +8,7 @@ import Turret, { TURRET_GRID_SIZE } from '../game_objects/turret';
 import Blade, { BLADE_GRID_SIZE } from '../game_objects/blade';
 import Gate, { GATE_GRID_SIZE } from '../game_objects/gate';
 import { PlatformerScene } from '../scene';
-import LaserTurret from '../game_objects/laser_turret';
+import LaserTurret, { LASER_TURRET_GRID_SIZE } from '../game_objects/laser_turret';
 
 const LEVEL_X = 200;
 const LEVEL_Y = 100;
@@ -16,8 +16,7 @@ const LEVEL_Y = 100;
 const X_ORIGIN = LEVEL_X + CELL_SIZE;
 const Y_ORIGIN = LEVEL_Y + CELL_SIZE;
 
-const LEVEL_WIDTH = 40;
-const LEVEL_HEIGHT = 20;
+
 
 /* 
   Level builder is built as a grid of cells. We use the following
@@ -135,12 +134,14 @@ export default class LevelBuilder {
     }
 
     for (const spike of levels[level].spikes) {
-      this.spikes.add(new Spike(
-        this.scene,
-        cx(spike.x),
-        cy(spike.y),
-        spike.direction,
-      ));
+      for (let i = 0; i < spike.length; i++) {
+        this.spikes.add(new Spike(
+          this.scene,
+          cx(spike.x + (spike.isVertical ? 0 : i)),
+          cy(spike.y + (spike.isVertical ? i : 0)),
+          spike.direction,
+        ));
+      }
     }
   }
 
@@ -167,8 +168,8 @@ export default class LevelBuilder {
     for (const turret of levels[level].lasers) {
       new LaserTurret(
         this.scene,
-        cx(turret.x, TURRET_GRID_SIZE),
-        cy(turret.y, TURRET_GRID_SIZE),
+        cx(turret.x, LASER_TURRET_GRID_SIZE),
+        cy(turret.y, LASER_TURRET_GRID_SIZE),
         turret.angle,
         turret.startDelay,
       );

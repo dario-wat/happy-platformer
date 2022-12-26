@@ -2,6 +2,7 @@ import * as Phaser from 'phaser';
 import laserTurretImage from '../../assets/laser_turret.png';
 import { CELL_SIZE } from '../consts';
 import { PlatformerScene } from '../scene';
+import { debugPoint } from '../util';
 import Laser from './laser';
 
 const LASER_TURRET_IMAGE = 'laser_turret_image';
@@ -11,7 +12,7 @@ export const LASER_TURRET_GRID_SIZE = 1;
 const IMAGE_SIZE = 126;
 const SIZE = LASER_TURRET_GRID_SIZE * CELL_SIZE;
 const SCALE = SIZE / IMAGE_SIZE;
-const ORIGIN_X = 0.64;
+const ORIGIN_X = 0.72;
 
 export default class LaserTurret extends Phaser.GameObjects.Sprite {
 

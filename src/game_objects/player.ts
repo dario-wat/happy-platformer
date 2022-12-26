@@ -4,6 +4,7 @@ import characterIdleImage from '../../assets/character_idle.png';
 import characterJumpImage from '../../assets/character_jump.png';
 import { DynamicSprite } from './sprite';
 import Gate from './gate';
+import { MAKE_PLAYER_INVULNERABLE } from '../consts';
 
 const CHARACTER_RUN_SS = 'character_run_ss';
 const CHARACTER_IDLE_SS = 'character_idle_ss';
@@ -19,8 +20,12 @@ const SPAWN_Y = 400;
 const MAX_VELOCITY = 160;
 const MIN_VELOCITY = 10;
 const JUMP_VELOCITY = 500;
-const ACCELERATION = 400;
-const IDLE_DECELERATION = 200;
+const ACCELERATION = 600;
+const IDLE_DECELERATION = 400;
+
+const SIZE_X = 12;
+const SIZE_Y = 36;
+const OFFSET_Y = 16 + 48 - SIZE_Y;  // Padding + sprite height - body height
 
 export default class Player extends DynamicSprite {
 
@@ -34,8 +39,8 @@ export default class Player extends DynamicSprite {
     scene.physics.add.existing(this);
 
     // Game object is larger than the sprite, so we need to adjust the body size
-    this.setSize(32, 48);    // Measured manually
-    this.setOffset(48, 16);  // Offset x = (frame width - size X) / 2
+    this.setSize(SIZE_X, SIZE_Y);
+    this.setOffset((this.width - SIZE_X) / 2, OFFSET_Y);
 
     this.setDepth(1);
     this.setMaxVelocity(MAX_VELOCITY, JUMP_VELOCITY);
@@ -148,5 +153,12 @@ export default class Player extends DynamicSprite {
   respawnAtGate(gate: Gate): void {
     const spawnThreshold = 10;
     this.respawn(gate.x, gate.y - spawnThreshold);
+  }
+
+  killAndRespawn(gate: Gate): void {
+    if (MAKE_PLAYER_INVULNERABLE) {
+      return;
+    }
+    this.respawnAtGate(gate);
   }
 }

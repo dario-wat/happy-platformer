@@ -1,5 +1,8 @@
 - Laser collision
 - Fix player motion
-- Make spikes triangular (or rather change the player body)
+- Make spike body smaller
 - Background
 - Make levels
+- Dying feels unsatisfying
+- Smaller player body rectangle
+- Jumping variable height

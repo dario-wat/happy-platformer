@@ -16,6 +16,8 @@ const IMAGE_SIZE = 512;
 const SIZE = GATE_GRID_SIZE * CELL_SIZE;
 const SCALE = SIZE / IMAGE_SIZE;
 
+const GATE_ANIMATION_DELAY = 2000;
+
 export default class Gate extends DynamicSprite {
 
   constructor(
@@ -41,7 +43,7 @@ export default class Gate extends DynamicSprite {
         LASER_DOOR_IMAGE,
         { start: 0, end: 4 }
       ),
-      delay: 1000,
+      delay: GATE_ANIMATION_DELAY,
       frameRate: 24,
       repeat: 0,
     });
@@ -52,7 +54,7 @@ export default class Gate extends DynamicSprite {
         LASER_DOOR_IMAGE,
         { start: 4, end: 0 }
       ),
-      delay: 1000,
+      delay: GATE_ANIMATION_DELAY,
       frameRate: 24,
       repeat: 0,
     });

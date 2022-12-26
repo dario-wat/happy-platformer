@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+import { DEBUG_PHYSICS } from './consts';
 import { PlatformerScene } from './scene';
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -9,7 +10,7 @@ const config: Phaser.Types.Core.GameConfig = {
     default: 'arcade',
     arcade: {
       gravity: { y: 1000 },
-      debug: true,
+      debug: DEBUG_PHYSICS,
     }
   },
   scene: new PlatformerScene(),
