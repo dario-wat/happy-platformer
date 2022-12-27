@@ -8,7 +8,7 @@ import Turret from './game_objects/turret';
 import Bullet from './game_objects/bullet';
 import BulletManager from './managers/bullet_manager';
 import Platform from './game_objects/platform';
-import LevelBuilder from './levels/level_builder';
+import LevelBuilder, { X_ORIGIN, Y_ORIGIN } from './levels/level_builder';
 import Gate from './game_objects/gate';
 import levels from './levels/levels';
 import { distanceBetween } from './util';
@@ -17,13 +17,19 @@ import Laser from './game_objects/laser';
 import LaserManager from './managers/laser_manager';
 import { START_LEVEL } from './consts';
 import Blood from './game_objects/blood';
+import DeathCounterText from './game_objects/death_counter';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const BG_BLANK_IMAGE = 'bg_blank_image';
 
+export const UI_FONT = { color: '#bababa', font: '24px Arial' };
+const UI_X = X_ORIGIN;
+const UI_Y = Y_ORIGIN - 50;
+
 export class PlatformerScene extends Phaser.Scene {
 
   public player: Player;
+  private deathCounter: DeathCounterText;
 
   public bulletManager: BulletManager;
   public laserManager: LaserManager;
@@ -69,7 +75,7 @@ export class PlatformerScene extends Phaser.Scene {
       this.player,
       this.bulletManager.bullets,
       (player: Player, bullet: Bullet) => {
-        player.killAndRespawn(this.levelBuilder.startGate);
+        this.killPlayer();
         bullet.destroy();
       },
     );
@@ -77,20 +83,19 @@ export class PlatformerScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.levelBuilder.blades,
-      (player: Player) => player.killAndRespawn(this.levelBuilder.startGate),
+      () => this.killPlayer(),
     );
 
-    const graphics = this.add.graphics();
     this.physics.add.overlap(
       this.player,
       this.levelBuilder.spikes,
-      (player: Player) => player.killAndRespawn(this.levelBuilder.startGate),
+      () => this.killPlayer(),
     );
 
     this.physics.add.overlap(
       this.player,
       this.laserManager.fakeLasers,
-      (player: Player) => player.killAndRespawn(this.levelBuilder.startGate),
+      () => this.killPlayer(),
     );
 
     this.physics.add.overlap(
@@ -98,11 +103,6 @@ export class PlatformerScene extends Phaser.Scene {
       this.levelBuilder.platforms,
       (bullet: Bullet) => bullet.destroy(),
     );
-
-    // this.add.image(0, 0, BG_BLANK_IMAGE).setOrigin(0, 0).setDisplaySize(
-    //   this.cameras.main.width,
-    //   this.cameras.main.height,
-    // );
 
     this.physics.add.overlap(
       this.player,
@@ -124,13 +124,21 @@ export class PlatformerScene extends Phaser.Scene {
         if (level === levels.length - 1) {
           // TODO
           // this.scene.start('game_over_scene');
-          this.scene.restart({ level: 0 });
+          this.scene.restart({ level: 0, deaths: 0 });
         } else {
-          this.scene.restart({ level: level + 1 });
+          this.scene.restart({ level: level + 1, deaths: this.deathCounter.getDeaths() });
         }
       }
     );
 
+    const xOffset = 150;
+    this.deathCounter = new DeathCounterText(
+      this,
+      UI_X + xOffset,
+      UI_Y,
+      data.deaths || 0,
+    );
+    this.add.text(UI_X, UI_Y, 'Level ' + level.toString(), UI_FONT);
   }
 
   update(): void {
@@ -152,4 +160,8 @@ export class PlatformerScene extends Phaser.Scene {
     }
   }
 
+  private killPlayer(): void {
+    this.deathCounter.add();
+    this.player.killAndRespawn(this.levelBuilder.startGate);
+  }
 }

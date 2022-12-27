@@ -13,10 +13,8 @@ import LaserTurret, { LASER_TURRET_GRID_SIZE } from '../game_objects/laser_turre
 const LEVEL_X = 200;
 const LEVEL_Y = 100;
 
-const X_ORIGIN = LEVEL_X + CELL_SIZE;
-const Y_ORIGIN = LEVEL_Y + CELL_SIZE;
-
-
+export const X_ORIGIN = LEVEL_X + CELL_SIZE;
+export const Y_ORIGIN = LEVEL_Y + CELL_SIZE;
 
 /* 
   Level builder is built as a grid of cells. We use the following
@@ -74,7 +72,6 @@ export default class LevelBuilder {
     this.buildLaserTurrets(level);
     this.buildBlades(level);
     this.buildGates(level);
-    this.drawLevel(level);
 
     if (DEBUG_GRID) {
       this.debugGrid();
@@ -207,16 +204,6 @@ export default class LevelBuilder {
       false,
     );
   }
-
-  private drawLevel(level: number): void {
-    const levelYOffset = 50;
-    this.scene.add.text(
-      X_ORIGIN,
-      Y_ORIGIN - levelYOffset,
-      'Level ' + level.toString(),
-      { color: '#bababa', font: '24px Arial' },
-    );
-  };
 
   private debugGrid(): void {
     // Draw index numbers above the grid
