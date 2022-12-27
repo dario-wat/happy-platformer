@@ -16,6 +16,7 @@ import LaserTurret from './game_objects/laser_turret';
 import Laser from './game_objects/laser';
 import LaserManager from './managers/laser_manager';
 import { START_LEVEL } from './consts';
+import Blood from './game_objects/blood';
 
 const PLATFORMER_SCENE = 'platformer_scene';
 const BG_BLANK_IMAGE = 'bg_blank_image';
@@ -44,6 +45,7 @@ export class PlatformerScene extends Phaser.Scene {
     Laser.preload(this);
     Platform.preload(this);
     Gate.preload(this);
+    Blood.preload(this);
     this.load.image(BG_BLANK_IMAGE, bgBlankImage);
   }
 
@@ -78,6 +80,7 @@ export class PlatformerScene extends Phaser.Scene {
       (player: Player) => player.killAndRespawn(this.levelBuilder.startGate),
     );
 
+    const graphics = this.add.graphics();
     this.physics.add.overlap(
       this.player,
       this.levelBuilder.spikes,

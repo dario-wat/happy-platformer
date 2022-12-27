@@ -5,6 +5,7 @@ import characterJumpImage from '../../assets/character_jump.png';
 import { DynamicSprite } from './sprite';
 import Gate from './gate';
 import { MAKE_PLAYER_INVULNERABLE } from '../consts';
+import Blood from './blood';
 
 const CHARACTER_RUN_SS = 'character_run_ss';
 const CHARACTER_IDLE_SS = 'character_idle_ss';
@@ -159,6 +160,7 @@ export default class Player extends DynamicSprite {
     if (MAKE_PLAYER_INVULNERABLE) {
       return;
     }
+    new Blood(this.scene, this.x, this.y);
     this.respawnAtGate(gate);
   }
 }

@@ -4,3 +4,4 @@
 - Smaller player body rectangle
 - Jumping variable height
 - SLight deleay after death, reopen gate?
+- Death counter
