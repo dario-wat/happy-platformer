@@ -8,7 +8,7 @@ export const TEXT_FONT = { color: UI_COLOR_STR, font: '36px Arial' };
 
 // Debugs
 export const DEBUG_GRID = false;
-export const MAKE_PLAYER_INVULNERABLE = true;
-export const START_LEVEL = 13;
+export const MAKE_PLAYER_INVULNERABLE = false;
+export const START_LEVEL = 0;
 export const DEBUG_PHYSICS = false;
-export const SKIP_START_SCENE = true;
+export const SKIP_START_SCENE = false;
