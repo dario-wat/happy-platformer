@@ -11,3 +11,4 @@ export const DEBUG_GRID = false;
 export const MAKE_PLAYER_INVULNERABLE = true;
 export const START_LEVEL = 13;
 export const DEBUG_PHYSICS = false;
+export const SKIP_START_SCENE = true;

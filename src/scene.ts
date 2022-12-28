@@ -141,21 +141,18 @@ export class PlatformerScene extends Phaser.Scene {
   }
 
   update(): void {
-    if (this.keys.d.isDown && this.keys.w.isDown) {
-      this.player.runRight();
-      this.player.jump();
-    } else if (this.keys.a.isDown && this.keys.w.isDown) {
-      this.player.runLeft();
-      this.player.jump();
-    } else if (this.keys.d.isDown) {
+    if (this.keys.d.isDown) {
       this.player.runRight();
     } else if (this.keys.a.isDown) {
       this.player.runLeft();
-    } else if (this.keys.w.isDown) {
-      this.player.idle();
-      this.player.jump();
     } else {
       this.player.idle();
+    }
+
+    if (this.keys.w.isUp) {
+      this.player.resetJump();
+    } else if (this.keys.w.isDown) {
+      this.player.jump();
     }
   }
 

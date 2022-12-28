@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { DEBUG_PHYSICS } from './consts';
+import { DEBUG_PHYSICS, SKIP_START_SCENE } from './consts';
 import { PlatformerScene } from './scene';
 import StartGameScene from './start_game_scene';
 
@@ -14,7 +14,9 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: DEBUG_PHYSICS,
     }
   },
-  scene: [
+  scene: SKIP_START_SCENE ? [
+    new PlatformerScene(),
+  ] : [
     new StartGameScene(),
     new PlatformerScene(),
   ]

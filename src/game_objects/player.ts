@@ -20,7 +20,8 @@ const SPAWN_Y = 400;
 
 const MAX_VELOCITY = 160;
 const MIN_VELOCITY = 10;
-const JUMP_VELOCITY = 500;
+const JUMP_VELOCITY = 300;
+const JUMP_HOLD_TIME = 300;
 const ACCELERATION = 600;
 const IDLE_DECELERATION = 400;
 
@@ -29,6 +30,8 @@ const SIZE_Y = 36;
 const OFFSET_Y = 16 + 48 - SIZE_Y;  // Padding + sprite height - body height
 
 export default class Player extends DynamicSprite {
+
+  private jumpTimer: number = 0;
 
   constructor(
     scene: Phaser.Scene,
@@ -44,7 +47,7 @@ export default class Player extends DynamicSprite {
     this.setOffset((this.width - SIZE_X) / 2, OFFSET_Y);
 
     this.setDepth(1);
-    this.setMaxVelocity(MAX_VELOCITY, JUMP_VELOCITY);
+    this.setMaxVelocity(MAX_VELOCITY, Infinity);
     this.setCollideWorldBounds(true);
 
     // Animation for running right
@@ -99,15 +102,11 @@ export default class Player extends DynamicSprite {
     );
   }
 
-  private isInAir(): boolean {
-    return !this.body.blocked.down;
-  }
-
   runRight(): void {
     this.setAccelerationX(ACCELERATION);
     this.flipX = false;
 
-    if (!this.isInAir()) {
+    if (this.body.onFloor()) {
       this.anims.play(CHARACTER_RUN_RIGHT_AN, true);
     }
   }
@@ -116,7 +115,7 @@ export default class Player extends DynamicSprite {
     this.setAccelerationX(-ACCELERATION);
     this.flipX = true;
 
-    if (!this.isInAir()) {
+    if (this.body.onFloor()) {
       this.anims.play(CHARACTER_RUN_RIGHT_AN, true);
     }
   }
@@ -132,17 +131,27 @@ export default class Player extends DynamicSprite {
       this.setAccelerationX(IDLE_DECELERATION);
     }
 
-    if (!this.isInAir()) {
+    if (this.body.onFloor()) {
       this.anims.play(CHARACTER_IDLE_AN, true);
     }
   }
 
+  resetJump(): void {
+    this.jumpTimer = 0;
+  }
+
   jump(): void {
-    if (this.isInAir()) {
-      return;
+    if (this.body.onFloor()) {
+      this.setVelocityY(-JUMP_VELOCITY);
+      this.jumpTimer = this.scene.time.now;
+      this.anims.play(CHARACTER_JUMP_AN, true);
+    } else if (
+      this.jumpTimer > 0
+      && !this.body.onCeiling()
+      && this.scene.time.now - this.jumpTimer < JUMP_HOLD_TIME
+    ) {
+      this.setVelocityY(-JUMP_VELOCITY);
     }
-    this.setVelocityY(-JUMP_VELOCITY);
-    this.anims.play(CHARACTER_JUMP_AN, true);
   }
 
   respawn(x: number = SPAWN_X, y: number = SPAWN_Y): void {
