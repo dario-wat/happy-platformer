@@ -1,6 +1,7 @@
 import * as Phaser from 'phaser';
 import { DEBUG_PHYSICS } from './consts';
 import { PlatformerScene } from './scene';
+import StartGameScene from './start_game_scene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -13,7 +14,10 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: DEBUG_PHYSICS,
     }
   },
-  scene: new PlatformerScene(),
+  scene: [
+    new StartGameScene(),
+    new PlatformerScene(),
+  ]
 };
 
 let game = new Phaser.Game(config);

@@ -16,6 +16,13 @@ const LEVEL_Y = 100;
 export const X_ORIGIN = LEVEL_X + CELL_SIZE;
 export const Y_ORIGIN = LEVEL_Y + CELL_SIZE;
 
+export const LEVEL_BOUNDS = new Phaser.Geom.Rectangle(
+  X_ORIGIN,
+  Y_ORIGIN,
+  LEVEL_WIDTH * CELL_SIZE,
+  LEVEL_HEIGHT * CELL_SIZE,
+);
+
 /* 
   Level builder is built as a grid of cells. We use the following
   functions to convert between cell coordinates and pixel coordinates.
