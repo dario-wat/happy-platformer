@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
-import { PlatformerScene, UI_FONT } from '../scene';
+import { HUD_FONT, MAKE_PLAYER_INVULNERABLE } from '../consts';
+import { PlatformerScene } from '../scene';
 
 export default class DeathCounterText extends Phaser.GameObjects.Text {
 
@@ -9,7 +10,7 @@ export default class DeathCounterText extends Phaser.GameObjects.Text {
     y: number,
     private deathCount: number,
   ) {
-    super(scene, x, y, `Deaths: ${deathCount}`, UI_FONT);
+    super(scene, x, y, `Deaths: ${deathCount}`, HUD_FONT);
     scene.add.existing(this);
   }
 
@@ -18,6 +19,9 @@ export default class DeathCounterText extends Phaser.GameObjects.Text {
   }
 
   public add(): void {
+    if (MAKE_PLAYER_INVULNERABLE) {
+      return;
+    }
     this.deathCount++;
     this.setText(`Deaths: ${this.deathCount}`);
   }

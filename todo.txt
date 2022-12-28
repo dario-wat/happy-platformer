@@ -1,3 +1,2 @@
 - Fix player motion
 - Jumping variable height
-- game over screen

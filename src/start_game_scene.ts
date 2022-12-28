@@ -2,12 +2,15 @@ import * as Phaser from 'phaser';
 import { PLATFORMER_SCENE } from './scene';
 import BackgroundImage from './game_objects/background_image';
 import { LEVEL_BOUNDS } from './levels/level_builder';
+import { TEXT_FONT, UI_COLOR } from './consts';
 
-const START_GAME_SCENE = 'start_game_scene';
+export const START_GAME_SCENE = 'start_game_scene';
 
 const BUTTON_PADDING_X = 10;
 const BUTTON_PADDING_Y = 10;
 const EDGE_RADIUS = 16;
+
+const DEATH_COUNT_Y_OFFSET = -100;
 
 export default class StartGameScene extends Phaser.Scene {
 
@@ -23,14 +26,24 @@ export default class StartGameScene extends Phaser.Scene {
     BackgroundImage.preload(this);
   }
 
-  create(): void {
+  create(data: any): void {
     new BackgroundImage(this);
+
+    if (data.deaths !== undefined) {
+      const deathText = this.add.text(
+        LEVEL_BOUNDS.centerX,
+        LEVEL_BOUNDS.centerY + DEATH_COUNT_Y_OFFSET,
+        `You died ${data.deaths} times`,
+        TEXT_FONT,
+      );
+      deathText.setOrigin(0.5, 0.5);
+    }
 
     let startText = this.add.text(
       LEVEL_BOUNDS.centerX,
       LEVEL_BOUNDS.centerY,
       'Start Game',
-      { color: '#bababa', font: '36px Arial' },
+      TEXT_FONT,
     );
     startText.setOrigin(0.5, 0.5);
 
@@ -71,7 +84,7 @@ export default class StartGameScene extends Phaser.Scene {
   }
 
   private drawButtonRectangle(): void {
-    this.graphics.lineStyle(2, 0xbababa, 1);
+    this.graphics.lineStyle(2, UI_COLOR, 1);
     this.graphics.strokeRoundedRect(
       this.buttonRectangle.x,
       this.buttonRectangle.y,

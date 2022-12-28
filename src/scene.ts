@@ -14,14 +14,14 @@ import { distanceBetween } from './util';
 import LaserTurret from './game_objects/laser_turret';
 import Laser from './game_objects/laser';
 import LaserManager from './managers/laser_manager';
-import { START_LEVEL } from './consts';
+import { HUD_FONT, START_LEVEL } from './consts';
 import Blood from './game_objects/blood';
 import DeathCounterText from './game_objects/death_counter';
 import BackgroundImage from './game_objects/background_image';
+import { START_GAME_SCENE } from './start_game_scene';
 
 export const PLATFORMER_SCENE = 'platformer_scene';
 
-export const UI_FONT = { color: '#bababa', font: '24px Arial' };
 const UI_X = X_ORIGIN;
 const UI_Y = Y_ORIGIN - 50;
 
@@ -122,11 +122,8 @@ export class PlatformerScene extends Phaser.Scene {
           return;
         }
 
-        // Destroy this scene and start a new one with the next level
         if (level === levels.length - 1) {
-          // TODO
-          // this.scene.start('game_over_scene');
-          this.scene.restart({ level: 0, deaths: 0 });
+          this.scene.start(START_GAME_SCENE, { deaths: this.deathCounter.getDeaths() });
         } else {
           this.scene.restart({ level: level + 1, deaths: this.deathCounter.getDeaths() });
         }
@@ -140,7 +137,7 @@ export class PlatformerScene extends Phaser.Scene {
       UI_Y,
       data.deaths || 0,
     );
-    this.add.text(UI_X, UI_Y, 'Level ' + (level + 1).toString(), UI_FONT);
+    this.add.text(UI_X, UI_Y, 'Level ' + (level + 1).toString(), HUD_FONT);
   }
 
   update(): void {
