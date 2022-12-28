@@ -1,6 +1,3 @@
 - Fix player motion
-- Background
-- Dying feels unsatisfying
-- Smaller player body rectangle
 - Jumping variable height
-- SLight deleay after death, reopen gate?
+- Start screen, game over screen

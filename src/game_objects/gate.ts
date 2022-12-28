@@ -16,7 +16,7 @@ const IMAGE_SIZE = 512;
 const SIZE = GATE_GRID_SIZE * CELL_SIZE;
 const SCALE = SIZE / IMAGE_SIZE;
 
-const GATE_ANIMATION_DELAY = 2000;
+const GATE_INITIAL_CHANGE_DELAY = 2000;
 
 export default class Gate extends DynamicSprite {
 
@@ -43,7 +43,6 @@ export default class Gate extends DynamicSprite {
         LASER_DOOR_IMAGE,
         { start: 0, end: 4 }
       ),
-      delay: GATE_ANIMATION_DELAY,
       frameRate: 24,
       repeat: 0,
     });
@@ -54,16 +53,17 @@ export default class Gate extends DynamicSprite {
         LASER_DOOR_IMAGE,
         { start: 4, end: 0 }
       ),
-      delay: GATE_ANIMATION_DELAY,
       frameRate: 24,
       repeat: 0,
     });
 
-    if (isStartGate) {
-      this.close();
-    } else {
-      this.open();
-    }
+    this.scene.time.delayedCall(GATE_INITIAL_CHANGE_DELAY, () => {
+      if (isStartGate) {
+        this.close();
+      } else {
+        this.open();
+      }
+    });
   }
 
   static preload(scene: Phaser.Scene): void {
@@ -77,12 +77,12 @@ export default class Gate extends DynamicSprite {
   }
 
   open(): void {
-    this.anims.play(OPEN_DOOR_AN);
+    this.anims.play(OPEN_DOOR_AN, true);
     this.once('animationcomplete', () => this.setTexture(DOOR_OPEN_IMAGE));
   }
 
   close(): void {
-    this.anims.play(CLOSE_DOOR_AN);
+    this.anims.play(CLOSE_DOOR_AN, true);
     this.once('animationcomplete', () => this.setTexture(DOOR_CLOSED_IMAGE));
   }
 }

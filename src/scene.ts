@@ -10,12 +10,12 @@ import BulletManager from './managers/bullet_manager';
 import Platform from './game_objects/platform';
 import LevelBuilder, { X_ORIGIN, Y_ORIGIN } from './levels/level_builder';
 import Gate from './game_objects/gate';
-import levels from './levels/levels';
+import levels, { LEVEL_HEIGHT, LEVEL_WIDTH } from './levels/levels';
 import { distanceBetween } from './util';
 import LaserTurret from './game_objects/laser_turret';
 import Laser from './game_objects/laser';
 import LaserManager from './managers/laser_manager';
-import { START_LEVEL } from './consts';
+import { CELL_SIZE, START_LEVEL } from './consts';
 import Blood from './game_objects/blood';
 import DeathCounterText from './game_objects/death_counter';
 
@@ -58,6 +58,12 @@ export class PlatformerScene extends Phaser.Scene {
   create(data: any): void {
     this.keys = new KeyboardInput(this);
 
+    const background = this.add.image(X_ORIGIN, Y_ORIGIN, BG_BLANK_IMAGE)
+    background.setOrigin(0, 0);
+    background.setDisplaySize(LEVEL_WIDTH * CELL_SIZE, LEVEL_HEIGHT * CELL_SIZE);
+    background.setAlpha(0.6);
+    background.setDepth(-1000);
+
     this.player = new Player(this);
 
     this.bulletManager = new BulletManager(this);
@@ -74,7 +80,7 @@ export class PlatformerScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.bulletManager.bullets,
-      (player: Player, bullet: Bullet) => {
+      (_player: Player, bullet: Bullet) => {
         this.killPlayer();
         bullet.destroy();
       },
